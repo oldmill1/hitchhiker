@@ -1,6 +1,10 @@
 <script lang="ts">
   import styles from './Home.module.scss';
-  import { Text, List, PropTable } from '$lib';
+  import { List, PropTable } from '$lib';
+
+  const charactersList = [
+    { content: 'Characters', link: 'characters' }
+  ];
 
   const characters = [
     { content: 'Harry Potter', link: '/harry-potter', starred: true, },
@@ -24,7 +28,7 @@
 
 <div class={styles.container}>
   <div class={styles.column}>
-    <Text weight="md">Characters</Text>
+    <List items={charactersList} />
   </div>
   <div class={styles.column}>
     <List items={characters} />
