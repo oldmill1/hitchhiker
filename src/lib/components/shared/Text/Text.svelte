@@ -10,7 +10,7 @@
     children?: any;
   }
   
-  let { el = 'p', size = 'md', weight = 'md', font = 'Work Sans', color, children }: Props = $props();
+  let { el = 'p', size = 'sm', weight = 'xs', font = 'Work Sans', color, children }: Props = $props();
   
   // Check if size is a predefined size or a custom value
   const predefinedSizes = ['xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl'];

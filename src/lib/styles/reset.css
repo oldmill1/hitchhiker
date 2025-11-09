@@ -34,12 +34,23 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: rgb(16, 20, 23);
-    color: #ffffff;
+    color: #64748b; /* slate grey */
 }
 
 /* A elements that don't have a class get default styles */
 a:not([class]) {
     text-decoration-skip-ink: auto;
+}
+
+/* Set anchor tag color site-wide */
+a {
+    color: #64748b; /* slate grey */
+    text-decoration: none;
+    font-weight: 500; /* slight bold effect */
+}
+
+a:hover {
+    color: #94a3b8; /* lighter slate grey */
 }
 
 /* Make images easier to work with */

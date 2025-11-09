@@ -1,3 +1,9 @@
 .container {
-  // Styles for the component
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+}
+
+.column {
+  flex: 1;
 }
