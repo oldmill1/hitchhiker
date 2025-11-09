@@ -5,4 +5,9 @@
   let { data }: { data: PageData } = $props();
 </script>
 
-<ColumnLayout column1={data.charactersList} />
+<ColumnLayout 
+  column1={data.charactersList} 
+  column2={data.characters} 
+  column3={data.actions}
+/>
+
