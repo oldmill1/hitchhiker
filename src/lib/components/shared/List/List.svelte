@@ -20,7 +20,9 @@
   {#each items as item}
     <li class:starred={item.starred}>
       <span class={styles.emojiSpace}>
-        {#if item.selected}⚪ {/if}
+        {#if item.selected}
+          <span class={styles.bookmark}></span>
+        {/if}
       </span>
       {#if item.link}
         <a href={item.link}>

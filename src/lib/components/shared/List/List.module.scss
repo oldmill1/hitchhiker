@@ -6,7 +6,7 @@
   li {
     margin-bottom: 0.33rem;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
   }
 
   li.starred {
@@ -23,7 +23,18 @@
 
   .emojiSpace {
     flex-shrink: 0;
-    width: 1.5em; /* Reserve space for emoji */
+    width: 1.5em; /* Reserve space for bookmark */
+    display: flex;
+    align-items: center;
+  }
+
+  .bookmark {
+    display: inline-block;
+    width: 0.75em;
+    height: 0.5em;
+    background-color: currentColor;
+    clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+    margin-right: 0.25em;
   }
 
   a,
