@@ -5,6 +5,8 @@
 
   li {
     margin-bottom: 0.33rem;
+    display: flex;
+    align-items: flex-start;
   }
 
   li:last-child {
@@ -12,7 +14,13 @@
   }
 
   .emojiSpace {
-    display: inline-block;
-    min-width: 1.5em; /* Reserve space for emoji */
+    flex-shrink: 0;
+    width: 1.5em; /* Reserve space for emoji */
+  }
+
+  a,
+  li > :global(p) {
+    flex: 1;
+    min-width: 0; /* Allow text to wrap */
   }
 }
