@@ -1,5 +1,6 @@
 <script lang="ts">
   import styles from './Icon.module.scss';
+  import { Text } from '$lib';
   import heartIcon from '$lib/assets/icons/heart.png';
   import selectAllIcon from '$lib/assets/icons/select-all.png';
 
@@ -28,14 +29,14 @@
   >
     <img src={iconSrc} alt={label || type} class={styles.image} />
     {#if label}
-      <div class={styles.label}>{label}</div>
+      <Text size="md" weight="md">{label}</Text>
     {/if}
   </button>
 {:else}
   <div class="{styles.icon} {styles[size]}">
     <img src={iconSrc} alt={label || type} class={styles.image} />
     {#if label}
-      <div class={styles.label}>{label}</div>
+      <Text size="xs" weight="md">{label}</Text>
     {/if}
   </div>
 {/if}
