@@ -20,6 +20,7 @@
     margin-bottom: 0.33rem;
     display: flex;
     align-items: center;
+    padding: 0.25rem 0.5rem;
   }
 
   li.even {
@@ -43,7 +44,6 @@
 
 .selected {
   background-color: #fff9e6 !important;
-  padding: 0.25rem 0.5rem;
 }
 
 .selected :global(a) {

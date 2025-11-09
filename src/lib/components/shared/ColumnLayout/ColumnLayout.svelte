@@ -1,6 +1,6 @@
 <script lang="ts">
   import styles from './ColumnLayout.module.scss';
-  import { List, Infoscreen } from '$lib';
+  import { List, Infoscreen, IconBar } from '$lib';
   import type { ListItem, PropItem } from '$lib/data/characters';
   import type { Snippet } from 'svelte';
 
@@ -10,12 +10,21 @@
     column3?: ListItem[] | null;
     column4?: PropItem[] | null;
     column1Header?: Snippet;
+    onComputerClick?: (() => void) | undefined;
+    onHomeClick?: (() => void) | undefined;
+    onFavoritesClick?: (() => void) | undefined;
   }
 
-  let { column1, column2, column3, column4, column1Header }: Props = $props();
+  let { column1, column2, column3, column4, column1Header, onComputerClick, onHomeClick, onFavoritesClick }: Props = $props();
 </script>
 
-<div class={styles.container}>
+<div class={styles.wrapper}>
+  <IconBar 
+    onComputerClick={onComputerClick}
+    onHomeClick={onHomeClick}
+    onFavoritesClick={onFavoritesClick}
+  />
+  <div class={styles.container}>
   <div class={styles.column}>
     {#if column1}
       <List items={column1} header={column1Header} />
@@ -36,5 +45,6 @@
       <Infoscreen items={column4} />
     {/if}
   </div>
+</div>
 </div>
 

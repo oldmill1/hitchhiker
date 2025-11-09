@@ -10,3 +10,5 @@ export { default as Infoscreen } from './components/shared/Infoscreen/Infoscreen
 export { default as Text } from './components/shared/Text/Text.svelte';
 export { default as Modal } from './components/shared/Modal/Modal.svelte';
 export { default as AddCharacterForm } from './components/shared/AddCharacterForm/AddCharacterForm.svelte';
+export { default as Icon } from './components/shared/Icon/Icon.svelte';
+export { default as IconBar } from './components/shared/IconBar/IconBar.svelte';
