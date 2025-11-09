@@ -9,6 +9,10 @@
     align-items: flex-start;
   }
 
+  li.starred {
+    filter: brightness(0.85);
+  }
+
   li.even {
     background-color: black;
   }

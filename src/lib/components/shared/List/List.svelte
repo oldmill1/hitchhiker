@@ -18,9 +18,8 @@
 
 <ul class={styles.container}>
   {#each items as item}
-    <li>
+    <li class:starred={item.starred}>
       <span class={styles.emojiSpace}>
-        {#if item.starred}⭐ {/if}
         {#if item.selected}⚪ {/if}
       </span>
       {#if item.link}
