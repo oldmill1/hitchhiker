@@ -21,10 +21,22 @@ export const load: PageLoad = async ({ params }) => {
     throw error(404, 'Vitals not found');
   }
 
+  const charactersList = getCharactersList();
+  const characters = getCharacters(params.character);
+  const actions = getCharacterActions(params.character, 'vitals');
+  
+  console.log(`[/characters/${params.character}/vitals] Fetched data:`, {
+    charactersList,
+    characters,
+    actions,
+    vitals,
+    character
+  });
+
   return {
-    charactersList: getCharactersList(),
-    characters: getCharacters(params.character),
-    actions: getCharacterActions(params.character, 'vitals'),
+    charactersList,
+    characters,
+    actions,
     vitals,
     character
   };

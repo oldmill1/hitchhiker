@@ -21,10 +21,22 @@ export const load: PageLoad = async ({ params }) => {
     throw error(404, 'Relationships not found');
   }
 
+  const charactersList = getCharactersList();
+  const characters = getCharacters(params.character);
+  const actions = getCharacterActions(params.character, 'relationships');
+  
+  console.log(`[/characters/${params.character}/relationships] Fetched data:`, {
+    charactersList,
+    characters,
+    actions,
+    relationships,
+    character
+  });
+
   return {
-    charactersList: getCharactersList(),
-    characters: getCharacters(params.character),
-    actions: getCharacterActions(params.character, 'relationships'),
+    charactersList,
+    characters,
+    actions,
     relationships,
     character
   };

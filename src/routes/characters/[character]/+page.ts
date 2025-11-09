@@ -9,10 +9,21 @@ export const load: PageLoad = async ({ params }) => {
     throw error(404, 'Character not found');
   }
 
+  const charactersList = getCharactersList();
+  const characters = getCharacters(params.character);
+  const actions = getCharacterActions(params.character);
+  
+  console.log(`[/characters/${params.character}] Fetched data:`, {
+    charactersList,
+    characters,
+    actions,
+    character
+  });
+
   return {
-    charactersList: getCharactersList(),
-    characters: getCharacters(params.character),
-    actions: getCharacterActions(params.character),
+    charactersList,
+    characters,
+    actions,
     character
   };
 };
