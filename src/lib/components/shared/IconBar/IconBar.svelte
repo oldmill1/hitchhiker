@@ -3,17 +3,15 @@
   import { Icon } from '$lib';
 
   interface Props {
-    onComputerClick?: (() => void) | undefined;
-    onHomeClick?: (() => void) | undefined;
+    onSelectAllClick?: (() => void) | undefined;
     onFavoritesClick?: (() => void) | undefined;
   }
 
-  let { onComputerClick, onHomeClick, onFavoritesClick }: Props = $props();
+  let { onSelectAllClick, onFavoritesClick }: Props = $props();
 </script>
 
 <div class={styles.iconBar}>
-  <Icon type="computer" label="Computer" onClick={onComputerClick} />
-  <Icon type="home" label="Home" onClick={onHomeClick} />
+  <Icon type="select-all" label="Select All" onClick={onSelectAllClick} />
   <Icon type="favorites" label="Favorites" onClick={onFavoritesClick} />
 </div>
 

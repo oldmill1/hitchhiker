@@ -1,8 +1,10 @@
 <script lang="ts">
   import styles from './Icon.module.scss';
+  import heartIcon from '$lib/assets/icons/heart.png';
+  import selectAllIcon from '$lib/assets/icons/select-all.png';
 
   interface Props {
-    type: 'computer' | 'home' | 'favorites';
+    type: 'select-all' | 'favorites';
     label?: string;
     size?: 'sm' | 'md' | 'lg';
     onClick?: (() => void) | undefined;
@@ -10,13 +12,12 @@
 
   let { type, label, size = 'md', onClick }: Props = $props();
 
-  const iconMap: Record<'computer' | 'home' | 'favorites', string> = {
-    computer: '💻',
-    home: '🏠',
-    favorites: '❤️'
+  const iconMap: Record<'select-all' | 'favorites', string> = {
+    'select-all': selectAllIcon,
+    'favorites': heartIcon
   };
 
-  const icon = iconMap[type];
+  const iconSrc = iconMap[type];
 </script>
 
 {#if onClick}
@@ -25,14 +26,14 @@
     onclick={onClick}
     type="button"
   >
-    <div class={styles.emoji}>{icon}</div>
+    <img src={iconSrc} alt={label || type} class={styles.image} />
     {#if label}
       <div class={styles.label}>{label}</div>
     {/if}
   </button>
 {:else}
   <div class="{styles.icon} {styles[size]}">
-    <div class={styles.emoji}>{icon}</div>
+    <img src={iconSrc} alt={label || type} class={styles.image} />
     {#if label}
       <div class={styles.label}>{label}</div>
     {/if}

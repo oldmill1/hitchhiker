@@ -10,18 +10,16 @@
     column3?: ListItem[] | null;
     column4?: PropItem[] | null;
     column1Header?: Snippet;
-    onComputerClick?: (() => void) | undefined;
-    onHomeClick?: (() => void) | undefined;
+    onSelectAllClick?: (() => void) | undefined;
     onFavoritesClick?: (() => void) | undefined;
   }
 
-  let { column1, column2, column3, column4, column1Header, onComputerClick, onHomeClick, onFavoritesClick }: Props = $props();
+  let { column1, column2, column3, column4, column1Header, onSelectAllClick, onFavoritesClick }: Props = $props();
 </script>
 
 <div class={styles.wrapper}>
   <IconBar 
-    onComputerClick={onComputerClick}
-    onHomeClick={onHomeClick}
+    onSelectAllClick={onSelectAllClick}
     onFavoritesClick={onFavoritesClick}
   />
   <div class={styles.container}>
