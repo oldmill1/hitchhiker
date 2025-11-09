@@ -98,3 +98,38 @@ export function getCharactersList(selected: boolean = false): ListItem[] {
   ];
 }
 
+// Slug generation utility
+export function generateSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '') // Remove special characters
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
+    .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+}
+
+// Create character with duplicate slug handling
+export async function createCharacter(name: string): Promise<string> {
+  const baseSlug = generateSlug(name);
+  
+  // Check if base slug exists and find available slug
+  let slug = baseSlug;
+  let counter = 2;
+  
+  while (await prisma.character.findUnique({ where: { slug } })) {
+    slug = `${baseSlug}-${counter}`;
+    counter++;
+  }
+  
+  // Create the character
+  await prisma.character.create({
+    data: {
+      name,
+      slug
+    }
+  });
+  
+  return slug;
+}
+

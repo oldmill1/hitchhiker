@@ -17,7 +17,9 @@ export const load: PageServerLoad = async ({ params }) => {
 
   const vitals = await getCharacterVitals(params.character);
   
-  if (!vitals) {
+  // Allow empty arrays (new characters won't have vitals yet)
+  // Only throw error if vitals is null (character doesn't exist)
+  if (vitals === null) {
     throw error(404, 'Vitals not found');
   }
 
