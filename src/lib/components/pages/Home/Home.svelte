@@ -14,6 +14,12 @@
     { content: 'Vitals', link: '/vitals/' },
     { content: 'Relationships', link: '/relationships' },
   ];
+
+  const propTableItems = [
+    { name: 'Name', value: 'Albus Dumbledore' },
+    { name: 'Born', value: '1881' },
+    { name: 'Died', value: '30 June 1997' }
+  ];
 </script>
 
 <div class={styles.container}>
@@ -27,6 +33,6 @@
     <List items={actions} />
   </div>
   <div class={styles.doubleColumn}>
-    <PropTable />
+    <PropTable items={propTableItems} />
   </div>
 </div>
