@@ -1,0 +1,14 @@
+.container {
+  font-family: 'Work Sans', sans-serif;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 3fr 7fr;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  text-align: left;
+}
+

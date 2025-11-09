@@ -1,6 +1,6 @@
 <script lang="ts">
   import styles from './ColumnLayout.module.scss';
-  import { List, PropTable } from '$lib';
+  import { List, Infoscreen } from '$lib';
   import type { ListItem, PropItem } from '$lib/data/characters';
 
   interface Props {
@@ -31,7 +31,7 @@
   </div>
   <div class={styles.doubleColumn}>
     {#if column4}
-      <PropTable items={column4} />
+      <Infoscreen items={column4} />
     {/if}
   </div>
 </div>

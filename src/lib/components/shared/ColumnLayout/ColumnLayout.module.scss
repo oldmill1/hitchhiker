@@ -2,16 +2,26 @@
   display: flex;
   width: 100%;
   min-height: 100vh;
-  gap: 1rem;
+  gap: 0;
 }
 
 .column {
   flex: 1;
-  background-color: #1e293b; /* dark-slate-black */
+  background-color: rgb(16, 20, 23);
+  border-right: 1px solid #334155; /* dark grey separator */
+  
+  &:last-child {
+    border-right: none;
+  }
 }
 
 .doubleColumn {
   flex: 2;
-  background-color: #1e293b; /* dark-slate-black */
+  background-color: rgb(16, 20, 23); /* dark-slate-black */
+  border-right: 1px solid #334155; /* dark grey separator */
+  
+  &:last-child {
+    border-right: none;
+  }
 }
 

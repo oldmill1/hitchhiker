@@ -6,5 +6,5 @@
 export { default as Button } from './components/shared/Button/Button.svelte';
 export { default as ColumnLayout } from './components/shared/ColumnLayout/ColumnLayout.svelte';
 export { default as List } from './components/shared/List/List.svelte';
-export { default as PropTable } from './components/shared/PropTable/Proptable.svelte';
+export { default as Infoscreen } from './components/shared/Infoscreen/Infoscreen.svelte';
 export { default as Text } from './components/shared/Text/Text.svelte';

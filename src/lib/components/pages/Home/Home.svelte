@@ -1,6 +1,6 @@
 <script lang="ts">
   import styles from './Home.module.scss';
-  import { List, PropTable } from '$lib';
+  import { List, Infoscreen } from '$lib';
 
   const charactersList = [
     { content: 'Characters', link: 'characters' }
@@ -37,6 +37,6 @@
     <List items={actions} />
   </div>
   <div class={styles.doubleColumn}>
-    <PropTable items={propTableItems} />
+    <Infoscreen items={propTableItems} />
   </div>
 </div>
