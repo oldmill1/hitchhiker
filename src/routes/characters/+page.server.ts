@@ -1,9 +1,9 @@
-import type { PageLoad } from './$types';
+import type { PageServerLoad } from './$types';
 import { getCharactersList, getCharacters } from '$lib/data/characters';
 
-export const load: PageLoad = async () => {
+export const load: PageServerLoad = async () => {
   const charactersList = getCharactersList(true);
-  const characters = getCharacters();
+  const characters = await getCharacters();
   
   console.log('[/characters] Fetched data:', {
     charactersList,
