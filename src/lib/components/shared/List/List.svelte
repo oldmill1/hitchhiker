@@ -1,6 +1,7 @@
 <script lang="ts">
   import styles from './List.module.scss';
   import { Text } from '$lib';
+  import type { Snippet } from 'svelte';
 
   interface ListItem {
     content: string;
@@ -11,12 +12,19 @@
 
   interface Props {
     items: ListItem[];
+    header?: Snippet;
   }
 
-  let { items }: Props = $props();
+  let { items, header }: Props = $props();
 </script>
 
-<ul class={styles.container}>
+<div class={styles.wrapper}>
+  {#if header}
+    <div class={styles.header}>
+      {@render header()}
+    </div>
+  {/if}
+  <ul class={styles.container}>
   {#each items as item}
     <li class:starred={item.starred}>
       <span class={styles.emojiSpace}>
@@ -37,4 +45,5 @@
       {/if}
     </li>
   {/each}
-</ul>
+  </ul>
+</div>

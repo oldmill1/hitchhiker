@@ -8,3 +8,5 @@ export { default as ColumnLayout } from './components/shared/ColumnLayout/Column
 export { default as List } from './components/shared/List/List.svelte';
 export { default as Infoscreen } from './components/shared/Infoscreen/Infoscreen.svelte';
 export { default as Text } from './components/shared/Text/Text.svelte';
+export { default as Modal } from './components/shared/Modal/Modal.svelte';
+export { default as AddCharacterForm } from './components/shared/AddCharacterForm/AddCharacterForm.svelte';
