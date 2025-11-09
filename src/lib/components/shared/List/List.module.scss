@@ -9,6 +9,10 @@
     align-items: flex-start;
   }
 
+  li.even {
+    background-color: black;
+  }
+
   li:last-child {
     margin-bottom: 0;
   }
