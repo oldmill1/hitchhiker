@@ -9,17 +9,22 @@
     { content: 'Draco Malfoy', link: '/draco-malfoy', selected: true },
     { content: 'Luna Lovegood', link: '/luna-lovegood' }
   ];
+
+  const actions = [
+    { content: 'Vitals', link: '/vitals/' },
+    { content: 'Relationships', link: '/relationships' },
+  ];
 </script>
 
 <div class={styles.container}>
   <div class={styles.column}>
-    <Text>Characters</Text>
+    <Text weight="md">Characters</Text>
   </div>
   <div class={styles.column}>
     <List items={characters} />
   </div>
   <div class={styles.column}>
-    <Text>3</Text>
+    <List items={actions} />
   </div>
   <div class={styles.column}>
     <Text>4</Text>
