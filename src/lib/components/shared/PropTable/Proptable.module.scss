@@ -1,0 +1,20 @@
+.container {
+  font-family: 'Work Sans', sans-serif;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+
+  td {
+    text-align: left;
+  }
+}
+
+.propertyName {
+  width: 19%;
+  font-weight: 500;
+}
+
+.propertyValue {
+  width: 70%;
+}

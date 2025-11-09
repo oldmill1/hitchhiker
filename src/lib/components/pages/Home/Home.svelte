@@ -1,6 +1,6 @@
 <script lang="ts">
   import styles from './Home.module.scss';
-  import { Text, List } from '$lib';
+  import { Text, List, PropTable } from '$lib';
 
   const characters = [
     { content: 'Harry Potter', link: '/harry-potter', starred: true, },
@@ -26,10 +26,7 @@
   <div class={styles.column}>
     <List items={actions} />
   </div>
-  <div class={styles.column}>
-    <Text>4</Text>
-  </div>
-  <div class={styles.column}>
-    <Text>5</Text>
+  <div class={styles.doubleColumn}>
+    <PropTable />
   </div>
 </div>
