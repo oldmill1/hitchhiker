@@ -26,12 +26,7 @@
   {/if}
   <ul class={styles.container}>
   {#each items as item}
-    <li class:starred={item.starred}>
-      <span class={styles.emojiSpace}>
-        {#if item.selected}
-          <span class={styles.bookmark}></span>
-        {/if}
-      </span>
+    <li class="{item.starred ? styles.starred : ''} {item.selected ? styles.selected : ''}">
       {#if item.link}
         <a href={item.link}>
           <Text weight="md">

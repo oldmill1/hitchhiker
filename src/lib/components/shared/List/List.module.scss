@@ -22,10 +22,6 @@
     align-items: center;
   }
 
-  li.starred {
-    filter: brightness(0.85);
-  }
-
   li.even {
     background-color: black;
   }
@@ -34,25 +30,22 @@
     margin-bottom: 0;
   }
 
-  .emojiSpace {
-    flex-shrink: 0;
-    width: 1.5em; /* Reserve space for bookmark */
-    display: flex;
-    align-items: center;
-  }
-
-  .bookmark {
-    display: inline-block;
-    width: 0.75em;
-    height: 0.5em;
-    background-color: currentColor;
-    clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
-    margin-right: 0.25em;
-  }
-
   a,
   li > :global(p) {
     flex: 1;
     min-width: 0; /* Allow text to wrap */
   }
+}
+
+.starred {
+  filter: brightness(0.85);
+}
+
+.selected {
+  background-color: #fff9e6 !important;
+  padding: 0.25rem 0.5rem;
+}
+
+.selected :global(a) {
+  background-color: transparent;
 }
