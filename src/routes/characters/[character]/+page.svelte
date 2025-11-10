@@ -1,13 +1,14 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { isRedirect } from '@sveltejs/kit';
-  import { ColumnLayout, Modal, Button, Text } from '$lib';
+  import { ColumnLayout, Modal, Button, Text, AddCharacterForm } from '$lib';
   import buttonStyles from '$lib/components/shared/Button/Button.module.scss';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
 
   let isDeleteModalOpen = $state(false);
+  let isAddCharacterModalOpen = $state(false);
   let submitting = $state(false);
   let error = $state<string | null>(null);
 
@@ -20,6 +21,14 @@
       isDeleteModalOpen = false;
       error = null;
     }
+  }
+
+  function openAddCharacterModal() {
+    isAddCharacterModalOpen = true;
+  }
+
+  function closeAddCharacterModal() {
+    isAddCharacterModalOpen = false;
   }
 
   function handleDelete() {
@@ -70,6 +79,7 @@
   column2={data.characters} 
   column3={data.actions}
   onTrashClick={handleTrashClick}
+  onAddCharacterClick={openAddCharacterModal}
 />
 
 <Modal isOpen={isDeleteModalOpen} onClose={handleCloseModal}>
@@ -93,6 +103,12 @@
         </div>
       </form>
     </div>
+  {/snippet}
+</Modal>
+
+<Modal isOpen={isAddCharacterModalOpen} onClose={closeAddCharacterModal}>
+  {#snippet children()}
+    <AddCharacterForm onCancel={closeAddCharacterModal} />
   {/snippet}
 </Modal>
 
