@@ -4,6 +4,7 @@
   import { isRedirect } from '@sveltejs/kit';
   import styles from './AddCharacterForm.module.scss';
   import { Button, Text } from '$lib';
+  import { getRandomCharacterName } from '$lib/data/characterNames';
 
   interface Props {
     onCancel: () => void;
@@ -14,6 +15,11 @@
   let name = $state('');
   let submitting = $state(false);
   let error = $state<string | null>(null);
+
+  // Pre-fill with a random character name when the modal opens
+  $effect(() => {
+    name = getRandomCharacterName();
+  });
 
   function handleSubmit() {
     return async ({ result, update }: { result: any; update: () => Promise<void> }) => {
