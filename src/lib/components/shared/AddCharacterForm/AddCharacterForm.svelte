@@ -70,7 +70,7 @@
 <form 
   class={styles.form} 
   method="POST" 
-  action="?/create"
+  action="/characters?/create"
   use:enhance={handleSubmit}
 >
   <div class={styles.field}>

@@ -5,17 +5,18 @@
   import trashCanIcon from '$lib/assets/icons/trash-can.png';
 
   interface Props {
-    type: 'select-all' | 'favorites' | 'trash';
+    type: 'select-all' | 'favorites' | 'trash' | 'add-character';
     label?: string;
     onClick?: (() => void) | undefined;
   }
 
   let { type, label, onClick }: Props = $props();
 
-  const iconMap: Record<'select-all' | 'favorites' | 'trash', string> = {
+  const iconMap: Record<'select-all' | 'favorites' | 'trash' | 'add-character', string> = {
     'select-all': selectAllIcon,
     'favorites': heartIcon,
-    'trash': trashCanIcon
+    'trash': trashCanIcon,
+    'add-character': heartIcon
   };
 
   const iconSrc = iconMap[type];

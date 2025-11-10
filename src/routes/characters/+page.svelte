@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ColumnLayout, Modal, AddCharacterForm, Button } from '$lib';
+  import { ColumnLayout, Modal, AddCharacterForm } from '$lib';
   import type { PageData } from './$types';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
@@ -40,11 +40,8 @@
   column1={data.charactersList} 
   column2={data.characters}
   onSelectAllClick={handleSelectAll}
->
-  {#snippet column1Header()}
-    <Button onClick={openModal}>Add Character</Button>
-  {/snippet}
-</ColumnLayout>
+  onAddCharacterClick={openModal}
+/>
 
 <Modal isOpen={isModalOpen} onClose={closeModal}>
   {#snippet children()}

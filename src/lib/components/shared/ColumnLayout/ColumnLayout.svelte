@@ -13,9 +13,10 @@
     onSelectAllClick?: (() => void) | undefined;
     onFavoritesClick?: (() => void) | undefined;
     onTrashClick?: (() => void) | undefined;
+    onAddCharacterClick?: (() => void) | undefined;
   }
 
-  let { column1, column2, column3, column4, column1Header, onSelectAllClick, onFavoritesClick, onTrashClick }: Props = $props();
+  let { column1, column2, column3, column4, column1Header, onSelectAllClick, onFavoritesClick, onTrashClick, onAddCharacterClick }: Props = $props();
 </script>
 
 <div class={styles.wrapper}>
@@ -23,6 +24,7 @@
     onSelectAllClick={onSelectAllClick}
     onFavoritesClick={onFavoritesClick}
     onTrashClick={onTrashClick}
+    onAddCharacterClick={onAddCharacterClick}
   />
   <div class={styles.container}>
   <div class={styles.column}>
