@@ -1,21 +1,21 @@
 <script lang="ts">
-  import styles from './Icon.module.scss';
-  import { Text } from '$lib';
+  import styles from './Shortcut.module.scss';
   import heartIcon from '$lib/assets/icons/heart.png';
   import selectAllIcon from '$lib/assets/icons/select-all.png';
+  import trashCanIcon from '$lib/assets/icons/trash-can.png';
 
   interface Props {
-    type: 'select-all' | 'favorites';
+    type: 'select-all' | 'favorites' | 'trash';
     label?: string;
-    size?: 'sm' | 'md' | 'lg';
     onClick?: (() => void) | undefined;
   }
 
-  let { type, label, size = 'md', onClick }: Props = $props();
+  let { type, label, onClick }: Props = $props();
 
-  const iconMap: Record<'select-all' | 'favorites', string> = {
+  const iconMap: Record<'select-all' | 'favorites' | 'trash', string> = {
     'select-all': selectAllIcon,
-    'favorites': heartIcon
+    'favorites': heartIcon,
+    'trash': trashCanIcon
   };
 
   const iconSrc = iconMap[type];
@@ -23,20 +23,20 @@
 
 {#if onClick}
   <button 
-    class="{styles.icon} {styles[size]} {styles.clickable}" 
+    class="{styles.shortcut} {styles.clickable}" 
     onclick={onClick}
     type="button"
   >
     <img src={iconSrc} alt={label || type} class={styles.image} />
     {#if label}
-      <Text size="sm" weight="sm">{label}</Text>
+      <span class={styles.label}>{label}</span>
     {/if}
   </button>
 {:else}
-  <div class="{styles.icon} {styles[size]}">
+  <div class={styles.shortcut}>
     <img src={iconSrc} alt={label || type} class={styles.image} />
     {#if label}
-      <Text size="sm" weight="sm">{label}</Text>
+      <span class={styles.label}>{label}</span>
     {/if}
   </div>
 {/if}

@@ -1,6 +1,6 @@
 <script lang="ts">
   import styles from './ColumnLayout.module.scss';
-  import { List, Infoscreen, IconBar } from '$lib';
+  import { List, Infoscreen, ShortcutView } from '$lib';
   import type { ListItem, PropItem } from '$lib/data/characters';
   import type { Snippet } from 'svelte';
 
@@ -18,7 +18,7 @@
 </script>
 
 <div class={styles.wrapper}>
-  <IconBar 
+  <ShortcutView 
     onSelectAllClick={onSelectAllClick}
     onFavoritesClick={onFavoritesClick}
   />
