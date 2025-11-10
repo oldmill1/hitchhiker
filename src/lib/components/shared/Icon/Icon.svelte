@@ -29,14 +29,14 @@
   >
     <img src={iconSrc} alt={label || type} class={styles.image} />
     {#if label}
-      <Text size="md" weight="md">{label}</Text>
+      <Text size="sm" weight="sm">{label}</Text>
     {/if}
   </button>
 {:else}
   <div class="{styles.icon} {styles[size]}">
     <img src={iconSrc} alt={label || type} class={styles.image} />
     {#if label}
-      <Text size="xs" weight="md">{label}</Text>
+      <Text size="sm" weight="sm">{label}</Text>
     {/if}
   </div>
 {/if}

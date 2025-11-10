@@ -3,6 +3,7 @@
   import { Text } from '$lib';
   import type { Snippet } from 'svelte';
   import { selectedCharacter, extractCharacterSlug } from '$lib/stores/selectedCharacter';
+  import { multipleSelections } from '$lib/stores/multipleSelections';
 
   interface ListItem {
     content: string;
@@ -20,6 +21,7 @@
 
   // Reactive to store changes
   let currentSelected = $derived($selectedCharacter);
+  let currentMultipleSelections = $derived($multipleSelections);
 
   function handleCharacterClick(event: MouseEvent, link: string) {
     const slug = extractCharacterSlug(link);
@@ -30,15 +32,20 @@
   }
 
   function isItemSelected(item: ListItem): boolean {
-    // For character links (column 2), check store value
+    // For character links (column 2), check both single and multiple selection stores
     // For action links (column 3) and other items, use the item.selected prop
-    if (item.link && currentSelected) {
+    if (item.link) {
       // Only apply store logic to character detail pages (not sub-pages like /vitals or /relationships)
       // Character detail pages match: /characters/[slug] (exactly, no additional path segments)
       const isCharacterDetailPage = /^\/characters\/[^\/]+$/.test(item.link);
       if (isCharacterDetailPage) {
         const itemSlug = extractCharacterSlug(item.link);
-        return itemSlug === currentSelected;
+        if (!itemSlug) return item.selected ?? false;
+        
+        // Check if selected in single selection OR multiple selections
+        const isSingleSelected = currentSelected === itemSlug;
+        const isMultipleSelected = currentMultipleSelections.has(itemSlug);
+        return isSingleSelected || isMultipleSelected;
       }
     }
     // For action links and other items, use the item.selected prop from server

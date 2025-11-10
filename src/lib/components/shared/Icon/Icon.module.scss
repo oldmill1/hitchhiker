@@ -20,6 +20,8 @@
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  min-width: 120px;
+  flex: 0 0 auto;
   
   // Glossy overlay effect
   &::before {
