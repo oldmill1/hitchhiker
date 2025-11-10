@@ -3,6 +3,7 @@
   import heartIcon from '$lib/assets/icons/heart.png';
   import selectAllIcon from '$lib/assets/icons/select-all.png';
   import trashCanIcon from '$lib/assets/icons/trash-can.png';
+  import newIcon from '$lib/assets/icons/new.png';
 
   interface Props {
     type: 'select-all' | 'favorites' | 'trash' | 'add-character';
@@ -16,7 +17,7 @@
     'select-all': selectAllIcon,
     'favorites': heartIcon,
     'trash': trashCanIcon,
-    'add-character': heartIcon
+    'add-character': newIcon
   };
 
   const iconSrc = iconMap[type];
