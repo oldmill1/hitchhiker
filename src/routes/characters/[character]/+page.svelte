@@ -1,13 +1,98 @@
 <script lang="ts">
-  import { ColumnLayout } from '$lib';
+  import { enhance } from '$app/forms';
+  import { isRedirect } from '@sveltejs/kit';
+  import { ColumnLayout, Modal, Button, Text } from '$lib';
+  import buttonStyles from '$lib/components/shared/Button/Button.module.scss';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
+
+  let isDeleteModalOpen = $state(false);
+  let submitting = $state(false);
+  let error = $state<string | null>(null);
+
+  function handleTrashClick() {
+    isDeleteModalOpen = true;
+  }
+
+  function handleCloseModal() {
+    if (!submitting) {
+      isDeleteModalOpen = false;
+      error = null;
+    }
+  }
+
+  function handleDelete() {
+    return async ({ result, update }: { result: any; update: () => Promise<void> }) => {
+      submitting = true;
+      error = null;
+
+      try {
+        await update();
+
+        // result might be a promise, so await it if needed
+        const formResult = result && typeof result === 'object' && 'then' in result 
+          ? await result 
+          : result;
+
+        // Handle redirect
+        if (formResult?.type === 'redirect') {
+          return;
+        }
+
+        if (formResult?.type === 'failure') {
+          const data = formResult.data as { error?: string } | undefined;
+          error = data?.error || 'Failed to delete character';
+          submitting = false;
+        } else if (formResult?.type === 'success') {
+          // Redirect will be handled by SvelteKit
+          return;
+        } else {
+          error = 'Unexpected response from server';
+          submitting = false;
+        }
+      } catch (err) {
+        // Check if it's a redirect first - redirects are thrown as errors but are actually success
+        if (isRedirect(err)) {
+          return;
+        }
+        // Only show error if it's not a redirect
+        console.error('Form submission error:', err);
+        error = 'An error occurred while deleting the character';
+        submitting = false;
+      }
+    };
+  }
 </script>
 
 <ColumnLayout 
   column1={data.charactersList} 
   column2={data.characters} 
   column3={data.actions}
+  onTrashClick={handleTrashClick}
 />
+
+<Modal isOpen={isDeleteModalOpen} onClose={handleCloseModal}>
+  {#snippet children()}
+    <div>
+      <Text weight="md">Delete Character</Text>
+      <p style="margin: 1rem 0;">
+        Are you sure you want to delete <strong>{data.character.name}</strong>? This action cannot be undone.
+      </p>
+      {#if error}
+        <div style="color: red; margin: 1rem 0;">
+          <Text>{error}</Text>
+        </div>
+      {/if}
+      <form method="POST" action="?/delete" use:enhance={handleDelete}>
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem; justify-content: flex-end;">
+          <Button onClick={handleCloseModal} disabled={submitting}>No</Button>
+          <button type="submit" class={buttonStyles.button} disabled={submitting}>
+            {submitting ? 'Deleting...' : 'Yes'}
+          </button>
+        </div>
+      </form>
+    </div>
+  {/snippet}
+</Modal>
 

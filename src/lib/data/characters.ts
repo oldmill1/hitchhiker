@@ -133,3 +133,20 @@ export async function createCharacter(name: string): Promise<string> {
   return slug;
 }
 
+// Get character ID from slug
+export async function getCharacterId(slug: string): Promise<string | null> {
+  const character = await prisma.character.findUnique({
+    where: { slug },
+    select: { id: true }
+  });
+
+  return character?.id ?? null;
+}
+
+// Delete character by ID
+export async function deleteCharacter(id: string): Promise<void> {
+  await prisma.character.delete({
+    where: { id }
+  });
+}
+

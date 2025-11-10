@@ -12,15 +12,17 @@
     column1Header?: Snippet;
     onSelectAllClick?: (() => void) | undefined;
     onFavoritesClick?: (() => void) | undefined;
+    onTrashClick?: (() => void) | undefined;
   }
 
-  let { column1, column2, column3, column4, column1Header, onSelectAllClick, onFavoritesClick }: Props = $props();
+  let { column1, column2, column3, column4, column1Header, onSelectAllClick, onFavoritesClick, onTrashClick }: Props = $props();
 </script>
 
 <div class={styles.wrapper}>
   <ShortcutView 
     onSelectAllClick={onSelectAllClick}
     onFavoritesClick={onFavoritesClick}
+    onTrashClick={onTrashClick}
   />
   <div class={styles.container}>
   <div class={styles.column}>
