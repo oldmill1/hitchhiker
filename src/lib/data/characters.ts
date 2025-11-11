@@ -65,14 +65,20 @@ export async function getCharacterVitals(slug: string): Promise<PropItem[] | nul
 export async function getCharacterRelationships(slug: string): Promise<PropItem[] | null> {
   const character = await prisma.character.findUnique({
     where: { slug },
-    include: { relationships: true }
+    include: { 
+      relationshipsFrom: {
+        include: {
+          toCharacter: true
+        }
+      }
+    }
   });
 
   if (!character) return null;
 
-  return character.relationships.map(rel => ({
-    name: rel.name,
-    value: rel.value
+  return character.relationshipsFrom.map(rel => ({
+    name: rel.label,
+    value: rel.toCharacter.name
   }));
 }
 

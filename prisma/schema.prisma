@@ -11,15 +11,16 @@ datasource db {
 }
 
 model Character {
-  id          String        @id @default(uuid())
-  name        String
-  slug        String        @unique
-  starred     Boolean       @default(false)
-  selected    Boolean       @default(false)
-  vitals      Vital[]
-  relationships Relationship[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  id              String        @id @default(uuid())
+  name            String
+  slug            String        @unique
+  starred         Boolean       @default(false)
+  selected        Boolean       @default(false)
+  vitals          Vital[]
+  relationshipsFrom Relationship[] @relation("FromCharacter")
+  relationshipsTo   Relationship[] @relation("ToCharacter")
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
   @@map("characters")
 }
@@ -37,13 +38,14 @@ model Vital {
 }
 
 model Relationship {
-  id          String    @id @default(uuid())
-  characterId String
-  name        String
-  value       String
-  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id              String    @id @default(uuid())
+  fromCharacterId String
+  toCharacterId   String
+  label           String
+  fromCharacter   Character @relation("FromCharacter", fields: [fromCharacterId], references: [id], onDelete: Cascade)
+  toCharacter     Character @relation("ToCharacter", fields: [toCharacterId], references: [id], onDelete: Cascade)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   @@map("relationships")
 }

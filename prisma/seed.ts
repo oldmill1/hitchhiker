@@ -6,7 +6,6 @@ async function main() {
   console.log('🌱 Starting seed...');
 
   // Clear existing data
-  await prisma.relationship.deleteMany();
   await prisma.vital.deleteMany();
   await prisma.character.deleteMany();
 
@@ -53,38 +52,6 @@ async function main() {
     ]
   };
 
-  // Relationships data
-  const relationshipsData: Record<string, Array<{ name: string; value: string }>> = {
-    'harry-potter': [
-      { name: 'Best Friend', value: 'Ron Weasley' },
-      { name: 'Best Friend', value: 'Hermione Granger' },
-      { name: 'Godfather', value: 'Sirius Black' },
-      { name: 'Mentor', value: 'Albus Dumbledore' }
-    ],
-    'hermione-granger': [
-      { name: 'Best Friend', value: 'Harry Potter' },
-      { name: 'Best Friend', value: 'Ron Weasley' },
-      { name: 'Boyfriend', value: 'Ron Weasley' }
-    ],
-    'ron-weasley': [
-      { name: 'Best Friend', value: 'Harry Potter' },
-      { name: 'Best Friend', value: 'Hermione Granger' },
-      { name: 'Girlfriend', value: 'Hermione Granger' },
-      { name: 'Family', value: 'Weasley Family' }
-    ],
-    'draco-malfoy': [
-      { name: 'Father', value: 'Lucius Malfoy' },
-      { name: 'Mother', value: 'Narcissa Malfoy' },
-      { name: 'Friend', value: 'Vincent Crabbe' },
-      { name: 'Friend', value: 'Gregory Goyle' }
-    ],
-    'luna-lovegood': [
-      { name: 'Father', value: 'Xenophilius Lovegood' },
-      { name: 'Friend', value: 'Harry Potter' },
-      { name: 'Friend', value: 'Neville Longbottom' }
-    ]
-  };
-
   // Create characters and their related data
   for (const charData of charactersData) {
     const character = await prisma.character.create({
@@ -95,9 +62,6 @@ async function main() {
         selected: charData.selected || false,
         vitals: {
           create: vitalsData[charData.slug] || []
-        },
-        relationships: {
-          create: relationshipsData[charData.slug] || []
         }
       }
     });
