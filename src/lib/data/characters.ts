@@ -191,3 +191,25 @@ export async function updateCharacterName(slug: string, name: string): Promise<v
   });
 }
 
+// Delete a vital by name
+export async function deleteVital(slug: string, name: string): Promise<void> {
+  const characterId = await getCharacterId(slug);
+  if (!characterId) {
+    throw new Error(`Character with slug "${slug}" not found`);
+  }
+
+  // Find and delete the vital with the given name for this character
+  const vital = await prisma.vital.findFirst({
+    where: {
+      characterId,
+      name
+    }
+  });
+
+  if (vital) {
+    await prisma.vital.delete({
+      where: { id: vital.id }
+    });
+  }
+}
+

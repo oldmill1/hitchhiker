@@ -1,12 +1,10 @@
 <script lang="ts">
   import styles from './EditableVitalsForm.module.scss';
-  import { Text } from '$lib';
 
   interface VitalField {
     id: string;
     name: string;
     value: string;
-    isPreset: boolean;
   }
 
   interface Props {
@@ -17,55 +15,21 @@
 
   let { initialVitals = [], characterSlug, onSaveSuccess }: Props = $props();
 
-  // Pre-set field names (only used for special handling like Name field)
-  const PRESET_FIELDS = ['Name'];
-
-  // Initialize vitals state
-  // All vitals loaded from DB go into presetVitals (use presetField template)
-  // Only newly added fields go into customVitals (use field template)
-  let presetVitals = $state<VitalField[]>(
+  // Unified vitals state - all fields use the same template
+  let vitals = $state<VitalField[]>(
     initialVitals.map((v, index) => ({
-      id: `preset-${index}-${v.name}`,
+      id: `vital-${index}-${v.name}-${Date.now()}`,
       name: v.name,
       value: v.value,
-      isPreset: true,
     }))
   );
-
-  // Custom vitals are only for newly added fields (not yet saved to DB)
-  let customVitals = $state<VitalField[]>([]);
-
-  // Track which preset field is in edit mode (for empty fields)
-  let editingPresetId = $state<string | null>(null);
-  let inputRefs: Record<string, HTMLInputElement> = {};
   
   // Track saving state per field to prevent duplicate saves
   let savingFields = $state<Set<string>>(new Set());
+  
+  // Track which field is in "confirm delete" state
+  let confirmingDeleteId = $state<string | null>(null);
 
-  function enterEditMode(id: string) {
-    editingPresetId = id;
-  }
-
-  // Focus input when entering edit mode
-  $effect(() => {
-    const id = editingPresetId;
-    if (id !== null) {
-      setTimeout(() => {
-        const input = inputRefs[id];
-        if (input) {
-          input.focus();
-        }
-      }, 0);
-    }
-  });
-
-  function exitEditMode(id: string) {
-    const vital = presetVitals.find((v) => v.id === id);
-    // Only exit edit mode if the field is still empty
-    if (vital && vital.value.trim() === '') {
-      editingPresetId = null;
-    }
-  }
 
   async function saveVital(name: string, value: string): Promise<boolean> {
     const fieldKey = `${name}-${value}`;
@@ -102,25 +66,6 @@
     }
   }
 
-  function moveCustomFieldToPreset(customId: string) {
-    const vital = customVitals.find((v) => v.id === customId);
-    if (vital && vital.name.trim() !== '' && vital.value.trim() !== '') {
-      // Remove from customVitals
-      customVitals = customVitals.filter((v) => v.id !== customId);
-      
-      // Add to presetVitals with a new ID
-      const newId = `preset-${Date.now()}-${vital.name}`;
-      presetVitals = [
-        ...presetVitals,
-        {
-          id: newId,
-          name: vital.name,
-          value: vital.value,
-          isPreset: true,
-        },
-      ];
-    }
-  }
 
   async function saveCharacterName(name: string) {
     try {
@@ -144,91 +89,133 @@
     }
   }
 
-  function handlePresetBlur(id: string) {
-    exitEditMode(id);
-    const vital = presetVitals.find((v) => v.id === id);
-    if (vital && vital.value.trim() !== '') {
-      saveVital(vital.name, vital.value);
-      // If it's the Name field, also update character name
-      if (vital.name === 'Name') {
-        saveCharacterName(vital.value);
-      }
-    }
-  }
-
-  function handlePresetKeydown(id: string, event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      const input = inputRefs[id];
-      if (input) {
-        input.blur();
-      }
-    }
-  }
-
   function addNewField() {
-    const newId = `custom-${Date.now()}`;
-    customVitals = [
-      ...customVitals,
+    const newId = `vital-${Date.now()}`;
+    vitals = [
+      ...vitals,
       {
         id: newId,
         name: '',
         value: '',
-        isPreset: false,
       },
     ];
   }
 
-  function removeField(id: string) {
-    customVitals = customVitals.filter((v) => v.id !== id);
+  async function deleteVitalFromDB(name: string): Promise<boolean> {
+    try {
+      const formData = new FormData();
+      formData.append('name', name);
+
+      const response = await fetch(`/characters/${characterSlug}/vitals?/deleteVital`, {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await response.json();
+
+      if (result.type === 'success' || result.success) {
+        onSaveSuccess?.();
+        return true;
+      } else {
+        console.error('Failed to delete vital:', result);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error deleting vital:', error);
+      return false;
+    }
   }
 
-  function handlePresetValueChange(id: string, value: string) {
-    presetVitals = presetVitals.map((v) =>
-      v.id === id ? { ...v, value } : v
-    );
+  async function handleRemoveClick(id: string, event: MouseEvent) {
+    event.stopPropagation(); // Prevent click from bubbling to document
+    const vital = vitals.find((v) => v.id === id);
+    if (!vital) return;
+
+    // If already in confirm state, delete it
+    if (confirmingDeleteId === id) {
+      // Only delete from DB if the field has a name (was saved to DB)
+      if (vital.name.trim() !== '') {
+        const success = await deleteVitalFromDB(vital.name);
+        if (success) {
+          // Remove from UI
+          vitals = vitals.filter((v) => v.id !== id);
+        }
+      } else {
+        // Just remove from UI if it was never saved
+        vitals = vitals.filter((v) => v.id !== id);
+      }
+      confirmingDeleteId = null;
+    } else {
+      // Enter confirm state
+      confirmingDeleteId = id;
+    }
   }
 
-  function handleCustomNameChange(id: string, name: string) {
-    customVitals = customVitals.map((v) =>
+  function cancelConfirmDelete() {
+    confirmingDeleteId = null;
+  }
+
+  // Cancel confirm state when clicking outside
+  function handleClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest(`.${styles.removeButton}`)) {
+      cancelConfirmDelete();
+    }
+  }
+
+  // Set up click outside listener
+  $effect(() => {
+    if (confirmingDeleteId !== null) {
+      // Use setTimeout to ensure this runs after the button click handler
+      setTimeout(() => {
+        document.addEventListener('click', handleClickOutside, true);
+      }, 0);
+      return () => {
+        document.removeEventListener('click', handleClickOutside, true);
+      };
+    }
+  });
+
+  function handleNameChange(id: string, name: string) {
+    vitals = vitals.map((v) =>
       v.id === id ? { ...v, name } : v
     );
   }
 
-  async function handleCustomNameBlur(id: string) {
-    const vital = customVitals.find((v) => v.id === id);
-    if (vital && vital.name.trim() !== '' && vital.value.trim() !== '') {
-      const success = await saveVital(vital.name, vital.value);
-      if (success) {
-        moveCustomFieldToPreset(id);
-      }
-    }
-  }
-
-  function handleCustomValueChange(id: string, value: string) {
-    customVitals = customVitals.map((v) =>
+  function handleValueChange(id: string, value: string) {
+    vitals = vitals.map((v) =>
       v.id === id ? { ...v, value } : v
     );
   }
 
-  async function handleCustomValueBlur(id: string) {
-    const vital = customVitals.find((v) => v.id === id);
+  async function handleNameBlur(id: string) {
+    const vital = vitals.find((v) => v.id === id);
     if (vital && vital.name.trim() !== '' && vital.value.trim() !== '') {
       const success = await saveVital(vital.name, vital.value);
-      if (success) {
-        moveCustomFieldToPreset(id);
+      if (success && vital.name === 'Name') {
+        await saveCharacterName(vital.value);
       }
     }
   }
 
-  async function handleCustomKeydown(id: string, event: KeyboardEvent, fieldType: 'name' | 'value') {
+  async function handleValueBlur(id: string) {
+    const vital = vitals.find((v) => v.id === id);
+    if (vital && vital.name.trim() !== '' && vital.value.trim() !== '') {
+      const success = await saveVital(vital.name, vital.value);
+      if (success && vital.name === 'Name') {
+        await saveCharacterName(vital.value);
+      }
+    }
+  }
+
+  async function handleKeydown(id: string, event: KeyboardEvent, fieldType: 'name' | 'value') {
     if (event.key === 'Enter') {
       event.preventDefault();
-      const vital = customVitals.find((v) => v.id === id);
+      const vital = vitals.find((v) => v.id === id);
       if (vital) {
         if (fieldType === 'name') {
           // Focus the value input
-          const valueInput = document.querySelector(`[data-custom-value-id="${id}"]`) as HTMLInputElement;
+          const valueInput = document.querySelector(`[data-value-id="${id}"]`) as HTMLInputElement;
           if (valueInput) {
             valueInput.focus();
           }
@@ -236,8 +223,8 @@
           // Save and blur
           if (vital.name.trim() !== '' && vital.value.trim() !== '') {
             const success = await saveVital(vital.name, vital.value);
-            if (success) {
-              moveCustomFieldToPreset(id);
+            if (success && vital.name === 'Name') {
+              await saveCharacterName(vital.value);
             }
           }
           (event.target as HTMLInputElement).blur();
@@ -248,48 +235,8 @@
 </script>
 
 <div class={styles.container}>
-  <!-- Pre-set fields section -->
-  {#each presetVitals as vital (vital.id)}
-    {@const isEmpty = vital.value.trim() === ''}
-    {@const isEditing = editingPresetId === vital.id}
-    {@const showInput = !isEmpty || isEditing}
-    
-    <div class={styles.presetField}>
-      {#if showInput}
-        <label class={styles.presetLabel} for={`preset-input-${vital.id}`}>
-          <Text size="sm" weight="sm">
-            {vital.name.toLowerCase()}
-          </Text>
-        </label>
-        <div class={styles.inputWrapper}>
-          <input
-            id={`preset-input-${vital.id}`}
-            type="text"
-            class={styles.presetInput}
-            value={vital.value}
-            placeholder="text"
-            bind:this={inputRefs[vital.id]}
-            oninput={(e) =>
-              handlePresetValueChange(vital.id, (e.target as HTMLInputElement).value)
-            }
-            onblur={() => handlePresetBlur(vital.id)}
-            onkeydown={(e) => handlePresetKeydown(vital.id, e)}
-          />
-        </div>
-      {:else}
-        <button
-          type="button"
-          class={styles.emptyStateLabel}
-          onclick={() => enterEditMode(vital.id)}
-        >
-          {vital.name}
-        </button>
-      {/if}
-    </div>
-  {/each}
-
-  <!-- Custom fields section -->
-  {#each customVitals as vital (vital.id)}
+  <!-- Unified fields section -->
+  {#each vitals as vital (vital.id)}
     <div class={styles.field}>
       <div class={styles.inputWrapper}>
         <input
@@ -297,12 +244,12 @@
           class={styles.input}
           value={vital.name}
           placeholder="text"
-          data-custom-name-id={vital.id}
+          data-name-id={vital.id}
           oninput={(e) =>
-            handleCustomNameChange(vital.id, (e.target as HTMLInputElement).value)
+            handleNameChange(vital.id, (e.target as HTMLInputElement).value)
           }
-          onblur={() => handleCustomNameBlur(vital.id)}
-          onkeydown={(e) => handleCustomKeydown(vital.id, e, 'name')}
+          onblur={() => handleNameBlur(vital.id)}
+          onkeydown={(e) => handleKeydown(vital.id, e, 'name')}
         />
       </div>
       <div class={styles.inputWrapper}>
@@ -311,20 +258,22 @@
           class={styles.input}
           value={vital.value}
           placeholder="text"
-          data-custom-value-id={vital.id}
+          data-value-id={vital.id}
           oninput={(e) =>
-            handleCustomValueChange(vital.id, (e.target as HTMLInputElement).value)
+            handleValueChange(vital.id, (e.target as HTMLInputElement).value)
           }
-          onblur={() => handleCustomValueBlur(vital.id)}
-          onkeydown={(e) => handleCustomKeydown(vital.id, e, 'value')}
+          onblur={() => handleValueBlur(vital.id)}
+          onkeydown={(e) => handleKeydown(vital.id, e, 'value')}
         />
         <button
           type="button"
-          class={styles.removeButton}
-          onclick={() => removeField(vital.id)}
-          aria-label="Remove field"
+          class={`${styles.removeButton} ${confirmingDeleteId === vital.id ? styles.confirm : ''}`}
+          onclick={(e) => handleRemoveClick(vital.id, e)}
+          aria-label={confirmingDeleteId === vital.id ? "Confirm delete" : "Remove field"}
         >
-          <span class={styles.removeIcon}>−</span>
+          <span class={styles.removeIcon}>
+            {confirmingDeleteId === vital.id ? '×' : '−'}
+          </span>
         </button>
       </div>
     </div>
@@ -341,4 +290,6 @@
     </button>
   </div>
 </div>
+
+
 

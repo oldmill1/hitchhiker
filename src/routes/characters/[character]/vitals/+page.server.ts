@@ -7,7 +7,8 @@ import {
   getCharacterActions,
   getCharacterVitals,
   saveOrUpdateVital,
-  updateCharacterName
+  updateCharacterName,
+  deleteVital
 } from '$lib/data/characters';
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -79,6 +80,23 @@ export const actions: Actions = {
     } catch (err) {
       console.error('Error updating character name:', err);
       return fail(500, { error: 'Failed to update character name' });
+    }
+  },
+
+  deleteVital: async ({ request, params }) => {
+    const formData = await request.formData();
+    const name = formData.get('name')?.toString().trim();
+
+    if (!name) {
+      return fail(400, { error: 'Vital name is required' });
+    }
+
+    try {
+      await deleteVital(params.character, name);
+      return { success: true };
+    } catch (err) {
+      console.error('Error deleting vital:', err);
+      return fail(500, { error: 'Failed to delete vital' });
     }
   }
 };
