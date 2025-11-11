@@ -1,5 +1,6 @@
 <script lang="ts">
   import styles from './EditableVitalsForm.module.scss';
+  import { invalidateAll } from '$app/navigation';
 
   interface VitalField {
     id: string;
@@ -16,13 +17,121 @@
   let { initialVitals = [], characterSlug, onSaveSuccess }: Props = $props();
 
   // Unified vitals state - all fields use the same template
+  // Initialize with saved vitals + one empty field at the end
   let vitals = $state<VitalField[]>(
-    initialVitals.map((v, index) => ({
-      id: `vital-${index}-${v.name}-${Date.now()}`,
-      name: v.name,
-      value: v.value,
-    }))
+    [
+      ...initialVitals.map((v, index) => ({
+        id: `vital-${index}-${v.name}-${Date.now()}`,
+        name: v.name,
+        value: v.value,
+      })),
+      {
+        id: `vital-empty-${Date.now()}`,
+        name: '',
+        value: '',
+      }
+    ]
   );
+
+  // Track the last known initialVitals to detect when it actually changes from server
+  let lastInitialVitalsKey = $state<string>('');
+  
+  // Initialize lastInitialVitalsKey on mount
+  $effect(() => {
+    if (lastInitialVitalsKey === '') {
+      lastInitialVitalsKey = JSON.stringify(initialVitals);
+    }
+  });
+  
+  // Sync vitals with initialVitals when it changes (after invalidation)
+  // Only sync when initialVitals actually changes from the server, not on every render
+  $effect(() => {
+    const currentInitialVitalsKey = JSON.stringify(initialVitals);
+    
+    // Only sync if initialVitals actually changed (from server refresh)
+    if (currentInitialVitalsKey !== lastInitialVitalsKey && lastInitialVitalsKey !== '') {
+      lastInitialVitalsKey = currentInitialVitalsKey;
+      
+      // Create a map of saved vitals by name|value for quick lookup
+      const savedVitalsMap = new Map(
+        initialVitals.map(v => [`${v.name}|${v.value}`, v])
+      );
+      
+      // Update existing vitals: match saved vitals and preserve unsaved/empty fields
+      const updatedVitals: VitalField[] = [];
+      const processedSavedKeys = new Set<string>();
+      
+      // First, try to match existing vitals with saved vitals (preserve IDs when possible)
+      for (const vital of vitals) {
+        const key = `${vital.name}|${vital.value}`;
+        const isEmpty = vital.name.trim() === '' && vital.value.trim() === '';
+        
+        if (isEmpty) {
+          // Always preserve empty fields
+          updatedVitals.push(vital);
+        } else if (savedVitalsMap.has(key)) {
+          // This vital matches a saved one - update it but try to preserve ID if it's similar
+          const savedVital = savedVitalsMap.get(key)!;
+          updatedVitals.push({
+            id: vital.id, // Preserve the ID
+            name: savedVital.name,
+            value: savedVital.value,
+          });
+          processedSavedKeys.add(key);
+        } else {
+          // This is an unsaved field being edited - preserve it
+          updatedVitals.push(vital);
+        }
+      }
+      
+      // Add any saved vitals that weren't matched (newly saved ones)
+      for (const [key, savedVital] of savedVitalsMap) {
+        if (!processedSavedKeys.has(key)) {
+          updatedVitals.push({
+            id: `vital-${Date.now()}-${savedVital.name}`,
+            name: savedVital.name,
+            value: savedVital.value,
+          });
+        }
+      }
+      
+      vitals = updatedVitals;
+    }
+  });
+
+  // Ensure there's always exactly one empty field at the end
+  // Only add a new empty field if there are no empty fields AND the last field is complete (both name and value filled)
+  $effect(() => {
+    const emptyFields = vitals.filter(v => v.name.trim() === '' && v.value.trim() === '');
+    
+    if (emptyFields.length === 0) {
+      // Only add an empty field if:
+      // 1. There are no vitals at all, OR
+      // 2. The last field has both name and value filled (user finished editing that field)
+      const lastField = vitals[vitals.length - 1];
+      const shouldAddEmpty = 
+        vitals.length === 0 || 
+        (lastField && lastField.name.trim() !== '' && lastField.value.trim() !== '');
+      
+      if (shouldAddEmpty) {
+        vitals = [
+          ...vitals,
+          {
+            id: `vital-empty-${Date.now()}`,
+            name: '',
+            value: '',
+          }
+        ];
+      }
+    } else if (emptyFields.length > 1) {
+      // Keep only the last empty field
+      const lastEmptyIndex = vitals.findLastIndex(v => v.name.trim() === '' && v.value.trim() === '');
+      vitals = vitals.filter((v, index) => {
+        const isEmpty = v.name.trim() === '' && v.value.trim() === '';
+        return !isEmpty || index === lastEmptyIndex;
+      });
+    }
+  });
   
   // Track saving state per field to prevent duplicate saves
   let savingFields = $state<Set<string>>(new Set());
@@ -89,17 +198,6 @@
     }
   }
 
-  function addNewField() {
-    const newId = `vital-${Date.now()}`;
-    vitals = [
-      ...vitals,
-      {
-        id: newId,
-        name: '',
-        value: '',
-      },
-    ];
-  }
 
   async function deleteVitalFromDB(name: string): Promise<boolean> {
     try {
@@ -192,8 +290,13 @@
     const vital = vitals.find((v) => v.id === id);
     if (vital && vital.name.trim() !== '' && vital.value.trim() !== '') {
       const success = await saveVital(vital.name, vital.value);
-      if (success && vital.name === 'Name') {
-        await saveCharacterName(vital.value);
+      if (success) {
+        if (vital.name === 'Name') {
+          await saveCharacterName(vital.value);
+        }
+        // Invalidate to refresh page data, which will update initialVitals
+        await invalidateAll();
+        onSaveSuccess?.();
       }
     }
   }
@@ -202,8 +305,13 @@
     const vital = vitals.find((v) => v.id === id);
     if (vital && vital.name.trim() !== '' && vital.value.trim() !== '') {
       const success = await saveVital(vital.name, vital.value);
-      if (success && vital.name === 'Name') {
-        await saveCharacterName(vital.value);
+      if (success) {
+        if (vital.name === 'Name') {
+          await saveCharacterName(vital.value);
+        }
+        // Invalidate to refresh page data, which will update initialVitals
+        await invalidateAll();
+        onSaveSuccess?.();
       }
     }
   }
@@ -223,8 +331,13 @@
           // Save and blur
           if (vital.name.trim() !== '' && vital.value.trim() !== '') {
             const success = await saveVital(vital.name, vital.value);
-            if (success && vital.name === 'Name') {
-              await saveCharacterName(vital.value);
+            if (success) {
+              if (vital.name === 'Name') {
+                await saveCharacterName(vital.value);
+              }
+              // Invalidate to refresh page data, which will update initialVitals
+              await invalidateAll();
+              onSaveSuccess?.();
             }
           }
           (event.target as HTMLInputElement).blur();
@@ -265,30 +378,21 @@
           onblur={() => handleValueBlur(vital.id)}
           onkeydown={(e) => handleKeydown(vital.id, e, 'value')}
         />
-        <button
-          type="button"
-          class={`${styles.removeButton} ${confirmingDeleteId === vital.id ? styles.confirm : ''}`}
-          onclick={(e) => handleRemoveClick(vital.id, e)}
-          aria-label={confirmingDeleteId === vital.id ? "Confirm delete" : "Remove field"}
-        >
-          <span class={styles.removeIcon}>
-            {confirmingDeleteId === vital.id ? '×' : '−'}
-          </span>
-        </button>
+        {#if vital.name.trim() !== ''}
+          <button
+            type="button"
+            class={`${styles.removeButton} ${confirmingDeleteId === vital.id ? styles.confirm : ''}`}
+            onclick={(e) => handleRemoveClick(vital.id, e)}
+            aria-label={confirmingDeleteId === vital.id ? "Confirm delete" : "Remove field"}
+          >
+            <span class={styles.removeIcon}>
+              {confirmingDeleteId === vital.id ? '×' : '−'}
+            </span>
+          </button>
+        {/if}
       </div>
     </div>
   {/each}
-
-  <!-- Add another field button -->
-  <div class={styles.addFieldSection}>
-    <button type="button" class={styles.addFieldButton} onclick={addNewField}>
-      <span class={styles.addIcon}>+</span>
-      <span>add another field</span>
-    </button>
-    <button type="button" class={styles.dropdownButton} aria-label="More options">
-      <span class={styles.dropdownIcon}>⌄</span>
-    </button>
-  </div>
 </div>
 
 

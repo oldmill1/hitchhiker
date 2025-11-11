@@ -5,19 +5,26 @@
   flex-direction: column;
   gap: 0;
   margin: 0;
-  padding: 1rem;
 }
 
 .field {
   display: grid;
   grid-template-columns: 3fr 7fr;
   gap: 0.5rem;
-  padding: 1rem 0;
   border-bottom: 1px solid #1e293b; /* subtle separator */
   position: relative;
+  align-items: center;
 
   &:last-of-type {
     border-bottom: none;
+  }
+
+  .inputWrapper:first-child {
+    background-color: #f0f4f8;
+
+    .input {
+      background-color: transparent;
+    }
   }
 }
 
@@ -29,27 +36,19 @@
 .input {
   width: 100%;
   background-color: rgb(16, 20, 23);
-  border: 1px solid transparent;
-  border-radius: 0.5rem;
-  color: #fff;
+  color: slategray;
   font-family: 'Work Sans', sans-serif;
-  font-size: 0.875rem;
-  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.4;
+  padding: 0.25rem 0.5rem;
   box-sizing: border-box;
   transition: box-shadow 0.2s;
+  font-weight: 500;
+  border: none;
+  outline: none;
 
   &::placeholder {
     color: #64748b; /* lighter gray */
-  }
-
-  &:focus {
-    outline: none;
-    border: 1px solid transparent;
-    box-shadow: 0 0 0 2px #475569; /* slate-600 */
-  }
-
-  &:not(:focus) {
-    border-color: transparent;
   }
 }
 
@@ -108,72 +107,47 @@
   justify-content: center;
 }
 
-.addFieldSection {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
-  padding-top: 0.5rem;
-}
+// Unused styles - kept for potential future use
+// .addFieldSection {
+//   display: flex;
+//   align-items: center;
+//   margin-top: 1rem;
+//   padding-top: 0.5rem;
+// }
 
-.addFieldButton {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: none;
-  border: none;
-  color: #fff;
-  font-family: 'Work Sans', sans-serif;
-  font-size: 0.875rem;
-  cursor: pointer;
-  padding: 0.5rem 0;
-  transition: color 0.2s;
+// .addFieldButton {
+//   display: flex;
+//   align-items: center;
+//   gap: 0.5rem;
+//   background: #f0e6ff; /* pastel purple */
+//   border: none;
+//   color: #6b21a8; /* purple-800 for contrast */
+//   font-family: 'Work Sans', sans-serif;
+//   font-size: 0.875rem;
+//   cursor: pointer;
+//   padding: 0.5rem 1rem;
+//   border-radius: 9999px; /* pill shape */
+//   transition: background-color 0.2s, transform 0.1s;
 
-  &:hover {
-    color: #94a3b8;
-  }
+//   &:hover {
+//     background: #e9d5ff; /* slightly darker pastel purple */
+//     transform: translateY(-1px);
+//   }
 
-  &:focus {
-    outline: 2px solid #3b82f6;
-    outline-offset: 2px;
-    border-radius: 0.25rem;
-  }
-}
+//   &:active {
+//     transform: translateY(0);
+//   }
 
-.addIcon {
-  color: #60a5fa; /* blue-400 */
-  font-size: 1.125rem;
-  font-weight: 400;
-  line-height: 1;
-}
+//   &:focus {
+//     outline: 2px solid #a855f7;
+//     outline-offset: 2px;
+//   }
+// }
 
-.dropdownButton {
-  background: none;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  padding: 0.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s;
-  width: 1.5rem;
-  height: 1.5rem;
-
-  &:hover {
-    color: #94a3b8;
-  }
-
-  &:focus {
-    outline: 2px solid #3b82f6;
-    outline-offset: 2px;
-    border-radius: 0.25rem;
-  }
-}
-
-.dropdownIcon {
-  font-size: 0.75rem;
-  line-height: 1;
-  color: #fff;
-}
+// .addIcon {
+//   font-size: 1rem;
+//   line-height: 1;
+//   display: flex;
+//   align-items: center;
+// }
 
