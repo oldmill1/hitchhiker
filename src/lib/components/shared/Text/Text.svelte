@@ -19,7 +19,7 @@
   const customSizeStyle = isCustomSize ? `font-size: ${size};` : '';
   
   // Build the style string with proper font-family
-  const styleString = `font-family: "${font}", sans-serif; ${color ? `color: ${color};` : ''} ${customSizeStyle}`;
+  const styleString = `${color ? `color: ${color};` : ''} ${customSizeStyle}`;
 </script>
 
 <svelte:element this={el} class="{styles.container} {!isCustomSize ? styles[size] : ''} {styles[`weight-${weight}`]} {lineHeight ? styles[`line-height-${lineHeight}`] : ''}" style={styleString}>{@render children?.()}</svelte:element>

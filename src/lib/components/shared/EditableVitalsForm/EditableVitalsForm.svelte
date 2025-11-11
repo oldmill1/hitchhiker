@@ -16,7 +16,7 @@
   let { initialVitals = [] }: Props = $props();
 
   // Pre-set field names
-  const PRESET_FIELDS = ['Name', 'DOB', 'DOD'];
+  const PRESET_FIELDS = ['Name', 'Date of birth', 'Nationality'];
 
   // Initialize vitals state
   // Separate preset and custom fields
@@ -121,7 +121,11 @@
     
     <div class={styles.presetField}>
       {#if showInput}
-        <label class={styles.presetLabel} for={`preset-input-${vital.id}`}>{vital.name}</label>
+        <label class={styles.presetLabel} for={`preset-input-${vital.id}`}>
+          <Text size="sm" weight="sm">
+            {vital.name.toLowerCase()}
+          </Text>
+        </label>
         <div class={styles.inputWrapper}>
           <input
             id={`preset-input-${vital.id}`}

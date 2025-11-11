@@ -5,7 +5,7 @@
   flex-direction: column;
   gap: 0;
   margin: 0;
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 .field {
@@ -24,10 +24,8 @@
 .presetField {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 1rem 0;
-  border-bottom: 1px solid #1e293b; /* subtle separator */
   position: relative;
+  margin-bottom: .5rem;
 
   &:last-of-type {
     border-bottom: none;
@@ -35,19 +33,18 @@
 }
 
 .presetLabel {
-  color: #a78bfa; /* purple-400 */
-  font-size: 0.875rem;
-  font-weight: 400;
   margin: 0;
   padding: 0;
+  margin-bottom: 0.25rem; /* Less space underneath */
+  display: block;
+  color: slateblue;
 }
 
 .emptyStateLabel {
   background: none;
   border: none;
-  color: #a78bfa; /* purple-400 */
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 500;
   font-family: 'Work Sans', sans-serif;
   text-align: left;
   width: 100%;
@@ -55,21 +52,14 @@
   cursor: pointer;
   margin: 0;
   transition: color 0.2s;
-
-  &:hover {
-    color: #c4b5fd; /* purple-300 */
-  }
-
-  &:focus {
-    outline: 2px solid #3b82f6;
-    outline-offset: 2px;
-    border-radius: 0.25rem;
-  }
+  color: slateblue;
+  text-transform: lowercase;
 }
 
 .inputWrapper {
   position: relative;
   width: 100%;
+  margin-top:-.5rem;
 }
 
 .input {
@@ -102,16 +92,16 @@
 .presetInput {
   width: 100%;
   background-color: rgb(16, 20, 23);
-  border: 1px solid transparent;
-  border-radius: 0.5rem;
+  border: none;
   color: #fff;
   font-family: 'Work Sans', sans-serif;
   font-size: 1.5rem;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
+  font-weight: 500;
   box-sizing: border-box;
-  transition: border-color 0.2s;
+  transition: box-shadow 0.2s ease;
   min-height: 2.5rem;
+  box-shadow: 0 0 0 1px transparent;
+  color: slategray;
 
   &::placeholder {
     color: #64748b; /* lighter gray */
@@ -119,11 +109,6 @@
 
   &:focus {
     outline: none;
-    border: 2px solid #3b82f6; /* blue-500 */
-  }
-
-  &:not(:focus) {
-    border-color: transparent;
   }
 }
 

@@ -13,8 +13,8 @@
   // Mock vitals data for visual implementation
   const mockVitals = [
     { name: 'Name', value: 'Harry James Potter' },
-    { name: 'DOB', value: '31 July 1980' },
-    { name: 'DOD', value: '' },
+    { name: 'Date of birth', value: '31 July 1980' },
+    { name: 'Nationality', value: 'Canadian' },
   ];
 
   function openAddCharacterModal() {
