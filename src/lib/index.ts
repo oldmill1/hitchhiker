@@ -12,3 +12,4 @@ export { default as Modal } from './components/shared/Modal/Modal.svelte';
 export { default as AddCharacterForm } from './components/shared/AddCharacterForm/AddCharacterForm.svelte';
 export { default as Shortcut } from './components/shared/Shortcut/Shortcut.svelte';
 export { default as ShortcutView } from './components/shared/ShortcutView/ShortcutView.svelte';
+export { default as EditableVitalsForm } from './components/shared/EditableVitalsForm/EditableVitalsForm.svelte';

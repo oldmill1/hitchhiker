@@ -9,6 +9,7 @@
     column2?: ListItem[] | null;
     column3?: ListItem[] | null;
     column4?: PropItem[] | null;
+    column4Content?: Snippet;
     column1Header?: Snippet;
     onSelectAllClick?: (() => void) | undefined;
     onFavoritesClick?: (() => void) | undefined;
@@ -16,7 +17,7 @@
     onAddCharacterClick?: (() => void) | undefined;
   }
 
-  let { column1, column2, column3, column4, column1Header, onSelectAllClick, onFavoritesClick, onTrashClick, onAddCharacterClick }: Props = $props();
+  let { column1, column2, column3, column4, column4Content, column1Header, onSelectAllClick, onFavoritesClick, onTrashClick, onAddCharacterClick }: Props = $props();
 </script>
 
 <div class={styles.wrapper}>
@@ -43,7 +44,9 @@
     {/if}
   </div>
   <div class={styles.doubleColumn}>
-    {#if column4}
+    {#if column4Content}
+      {@render column4Content()}
+    {:else if column4}
       <Infoscreen items={column4} />
     {/if}
   </div>
