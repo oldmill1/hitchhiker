@@ -356,7 +356,7 @@
           type="text"
           class={styles.input}
           value={vital.name}
-          placeholder="text"
+          placeholder="Age/Sex/etc"
           data-name-id={vital.id}
           oninput={(e) =>
             handleNameChange(vital.id, (e.target as HTMLInputElement).value)
@@ -370,7 +370,7 @@
           type="text"
           class={styles.input}
           value={vital.value}
-          placeholder="text"
+          placeholder="37/Male/etc"
           data-value-id={vital.id}
           oninput={(e) =>
             handleValueChange(vital.id, (e.target as HTMLInputElement).value)
