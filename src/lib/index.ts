@@ -13,3 +13,4 @@ export { default as AddCharacterForm } from './components/shared/AddCharacterFor
 export { default as Shortcut } from './components/shared/Shortcut/Shortcut.svelte';
 export { default as ShortcutView } from './components/shared/ShortcutView/ShortcutView.svelte';
 export { default as EditableVitalsForm } from './components/shared/EditableVitalsForm/EditableVitalsForm.svelte';
+export { default as Notification } from './components/shared/Notification/Notification.svelte';

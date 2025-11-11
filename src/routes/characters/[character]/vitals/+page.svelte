@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ColumnLayout, Modal, AddCharacterForm, EditableVitalsForm } from '$lib';
+  import { ColumnLayout, Modal, AddCharacterForm, EditableVitalsForm, Notification } from '$lib';
   import type { PageData } from './$types';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
@@ -9,13 +9,25 @@
   let { data }: { data: PageData } = $props();
 
   let isAddCharacterModalOpen = $state(false);
+  let notificationVisible = $state(false);
+  let notificationMessage = $state('Saved');
 
-  // Mock vitals data for visual implementation
-  const mockVitals = [
-    { name: 'Name', value: 'Harry James Potter' },
-    { name: 'Date of birth', value: '31 July 1980' },
-    { name: 'Nationality', value: 'Canadian' },
-  ];
+  // Get character slug from page params
+  const characterSlug = $derived(page.params.character);
+
+  function showNotification(message: string = 'Saved') {
+    notificationMessage = message;
+    notificationVisible = true;
+    
+    // Auto-hide after 3 seconds
+    setTimeout(() => {
+      notificationVisible = false;
+    }, 3000);
+  }
+
+  function handleSaveSuccess() {
+    showNotification('Saved');
+  }
 
   function openAddCharacterModal() {
     isAddCharacterModalOpen = true;
@@ -50,9 +62,18 @@
   onAddCharacterClick={openAddCharacterModal}
 >
   {#snippet column4Content()}
-    <EditableVitalsForm initialVitals={mockVitals} />
+    <EditableVitalsForm 
+      initialVitals={data.vitals} 
+      characterSlug={characterSlug}
+      onSaveSuccess={handleSaveSuccess}
+    />
   {/snippet}
 </ColumnLayout>
+
+<Notification 
+  message={notificationMessage} 
+  isVisible={notificationVisible} 
+/>
 
 <Modal isOpen={isAddCharacterModalOpen} onClose={closeAddCharacterModal}>
   {#snippet children()}

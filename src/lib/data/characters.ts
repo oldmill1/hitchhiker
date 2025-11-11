@@ -150,3 +150,44 @@ export async function deleteCharacter(id: string): Promise<void> {
   });
 }
 
+// Save or update a single vital
+export async function saveOrUpdateVital(slug: string, name: string, value: string): Promise<void> {
+  const characterId = await getCharacterId(slug);
+  if (!characterId) {
+    throw new Error(`Character with slug "${slug}" not found`);
+  }
+
+  // Find existing vital with same name for this character
+  const existingVital = await prisma.vital.findFirst({
+    where: {
+      characterId,
+      name
+    }
+  });
+
+  if (existingVital) {
+    // Update existing vital
+    await prisma.vital.update({
+      where: { id: existingVital.id },
+      data: { value }
+    });
+  } else {
+    // Create new vital
+    await prisma.vital.create({
+      data: {
+        characterId,
+        name,
+        value
+      }
+    });
+  }
+}
+
+// Update character name
+export async function updateCharacterName(slug: string, name: string): Promise<void> {
+  await prisma.character.update({
+    where: { slug },
+    data: { name }
+  });
+}
+
