@@ -18,6 +18,12 @@ Thumbs.db
 !.env.example
 !.env.test
 
+# Database
+*.db
+*.db-journal
+prisma/dev.db
+prisma/*.db
+
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
