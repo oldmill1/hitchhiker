@@ -12,6 +12,13 @@ export interface PropItem {
   value: string;
 }
 
+export interface RelationshipItem {
+  id?: string; // Optional for new relationships
+  label: string;
+  toCharacterName: string;
+  toCharacterSlug: string;
+}
+
 export interface ListItem {
   content: string;
   link?: string;
@@ -79,6 +86,28 @@ export async function getCharacterRelationships(slug: string): Promise<PropItem[
   return character.relationshipsFrom.map(rel => ({
     name: rel.label,
     value: rel.toCharacter.name
+  }));
+}
+
+export async function getCharacterRelationshipsWithDetails(slug: string): Promise<RelationshipItem[] | null> {
+  const character = await prisma.character.findUnique({
+    where: { slug },
+    include: { 
+      relationshipsFrom: {
+        include: {
+          toCharacter: true
+        }
+      }
+    }
+  });
+
+  if (!character) return null;
+
+  return character.relationshipsFrom.map(rel => ({
+    id: rel.id,
+    label: rel.label,
+    toCharacterName: rel.toCharacter.name,
+    toCharacterSlug: rel.toCharacter.slug
   }));
 }
 
@@ -217,5 +246,68 @@ export async function deleteVital(slug: string, name: string): Promise<void> {
       where: { id: vital.id }
     });
   }
+}
+
+// Get all characters except the current one for dropdown
+export async function getAllCharactersExceptCurrent(currentSlug: string): Promise<Array<{ name: string; slug: string }>> {
+  const characters = await prisma.character.findMany({
+    where: {
+      slug: { not: currentSlug }
+    },
+    orderBy: { name: 'asc' },
+    select: {
+      name: true,
+      slug: true
+    }
+  });
+
+  return characters;
+}
+
+// Save or update a relationship
+export async function saveOrUpdateRelationship(
+  fromCharacterSlug: string,
+  relationshipId: string | null,
+  label: string,
+  toCharacterSlug: string
+): Promise<string> {
+  const fromCharacterId = await getCharacterId(fromCharacterSlug);
+  if (!fromCharacterId) {
+    throw new Error(`Character with slug "${fromCharacterSlug}" not found`);
+  }
+
+  const toCharacterId = await getCharacterId(toCharacterSlug);
+  if (!toCharacterId) {
+    throw new Error(`Character with slug "${toCharacterSlug}" not found`);
+  }
+
+  if (relationshipId) {
+    // Update existing relationship
+    await prisma.relationship.update({
+      where: { id: relationshipId },
+      data: {
+        label,
+        toCharacterId
+      }
+    });
+    return relationshipId;
+  } else {
+    // Create new relationship
+    const relationship = await prisma.relationship.create({
+      data: {
+        fromCharacterId,
+        toCharacterId,
+        label
+      }
+    });
+    return relationship.id;
+  }
+}
+
+// Delete a relationship by ID
+export async function deleteRelationship(relationshipId: string): Promise<void> {
+  await prisma.relationship.delete({
+    where: { id: relationshipId }
+  });
 }
 
