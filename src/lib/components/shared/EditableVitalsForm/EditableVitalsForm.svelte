@@ -67,10 +67,10 @@
     }
   }
 
-  async function saveVital(name: string, value: string) {
+  async function saveVital(name: string, value: string): Promise<boolean> {
     const fieldKey = `${name}-${value}`;
     if (savingFields.has(fieldKey)) {
-      return; // Already saving
+      return false; // Already saving
     }
 
     savingFields = new Set([...savingFields, fieldKey]);
@@ -89,13 +89,36 @@
 
       if (result.type === 'success' || result.success) {
         onSaveSuccess?.();
+        return true;
       } else {
         console.error('Failed to save vital:', result);
+        return false;
       }
     } catch (error) {
       console.error('Error saving vital:', error);
+      return false;
     } finally {
       savingFields = new Set([...savingFields].filter(key => key !== fieldKey));
+    }
+  }
+
+  function moveCustomFieldToPreset(customId: string) {
+    const vital = customVitals.find((v) => v.id === customId);
+    if (vital && vital.name.trim() !== '' && vital.value.trim() !== '') {
+      // Remove from customVitals
+      customVitals = customVitals.filter((v) => v.id !== customId);
+      
+      // Add to presetVitals with a new ID
+      const newId = `preset-${Date.now()}-${vital.name}`;
+      presetVitals = [
+        ...presetVitals,
+        {
+          id: newId,
+          name: vital.name,
+          value: vital.value,
+          isPreset: true,
+        },
+      ];
     }
   }
 
@@ -172,10 +195,13 @@
     );
   }
 
-  function handleCustomNameBlur(id: string) {
+  async function handleCustomNameBlur(id: string) {
     const vital = customVitals.find((v) => v.id === id);
     if (vital && vital.name.trim() !== '' && vital.value.trim() !== '') {
-      saveVital(vital.name, vital.value);
+      const success = await saveVital(vital.name, vital.value);
+      if (success) {
+        moveCustomFieldToPreset(id);
+      }
     }
   }
 
@@ -185,14 +211,17 @@
     );
   }
 
-  function handleCustomValueBlur(id: string) {
+  async function handleCustomValueBlur(id: string) {
     const vital = customVitals.find((v) => v.id === id);
     if (vital && vital.name.trim() !== '' && vital.value.trim() !== '') {
-      saveVital(vital.name, vital.value);
+      const success = await saveVital(vital.name, vital.value);
+      if (success) {
+        moveCustomFieldToPreset(id);
+      }
     }
   }
 
-  function handleCustomKeydown(id: string, event: KeyboardEvent, fieldType: 'name' | 'value') {
+  async function handleCustomKeydown(id: string, event: KeyboardEvent, fieldType: 'name' | 'value') {
     if (event.key === 'Enter') {
       event.preventDefault();
       const vital = customVitals.find((v) => v.id === id);
@@ -206,7 +235,10 @@
         } else {
           // Save and blur
           if (vital.name.trim() !== '' && vital.value.trim() !== '') {
-            saveVital(vital.name, vital.value);
+            const success = await saveVital(vital.name, vital.value);
+            if (success) {
+              moveCustomFieldToPreset(id);
+            }
           }
           (event.target as HTMLInputElement).blur();
         }

@@ -1,6 +1,7 @@
 <script lang="ts">
   import styles from './Notification.module.scss';
   import { Text } from '$lib';
+  import successIcon from '$lib/assets/icons/success.png';
 
   interface Props {
     message: string;
@@ -13,7 +14,8 @@
 
 {#if isVisible}
   <div class={styles.notification}>
-    <Text>{message}</Text>
+    <img src={successIcon} alt="" class={styles.icon} />
+    <Text size="sm" weight="md" color="#64748b">{message}</Text>
   </div>
 {/if}
 
