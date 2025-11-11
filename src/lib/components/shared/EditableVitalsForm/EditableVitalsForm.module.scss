@@ -42,6 +42,31 @@
   padding: 0;
 }
 
+.emptyStateLabel {
+  background: none;
+  border: none;
+  color: #a78bfa; /* purple-400 */
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-family: 'Work Sans', sans-serif;
+  text-align: left;
+  width: 100%;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  margin: 0;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #c4b5fd; /* purple-300 */
+  }
+
+  &:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+}
+
 .inputWrapper {
   position: relative;
   width: 100%;

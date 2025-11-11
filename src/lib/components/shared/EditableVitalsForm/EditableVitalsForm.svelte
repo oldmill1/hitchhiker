@@ -43,6 +43,39 @@
       }))
   );
 
+  // Track which preset field is in edit mode (for empty fields)
+  let editingPresetId = $state<string | null>(null);
+  let inputRefs: Record<string, HTMLInputElement> = {};
+
+  function enterEditMode(id: string) {
+    editingPresetId = id;
+  }
+
+  // Focus input when entering edit mode
+  $effect(() => {
+    const id = editingPresetId;
+    if (id !== null) {
+      setTimeout(() => {
+        const input = inputRefs[id];
+        if (input) {
+          input.focus();
+        }
+      }, 0);
+    }
+  });
+
+  function exitEditMode(id: string) {
+    const vital = presetVitals.find((v) => v.id === id);
+    // Only exit edit mode if the field is still empty
+    if (vital && vital.value.trim() === '') {
+      editingPresetId = null;
+    }
+  }
+
+  function handlePresetBlur(id: string) {
+    exitEditMode(id);
+  }
+
   function addNewField() {
     const newId = `custom-${Date.now()}`;
     customVitals = [
@@ -82,19 +115,36 @@
 <div class={styles.container}>
   <!-- Pre-set fields section -->
   {#each presetVitals as vital (vital.id)}
+    {@const isEmpty = vital.value.trim() === ''}
+    {@const isEditing = editingPresetId === vital.id}
+    {@const showInput = !isEmpty || isEditing}
+    
     <div class={styles.presetField}>
-      <label class={styles.presetLabel}>{vital.name}</label>
-      <div class={styles.inputWrapper}>
-        <input
-          type="text"
-          class={styles.presetInput}
-          value={vital.value}
-          placeholder="text"
-          oninput={(e) =>
-            handlePresetValueChange(vital.id, (e.target as HTMLInputElement).value)
-          }
-        />
-      </div>
+      {#if showInput}
+        <label class={styles.presetLabel} for={`preset-input-${vital.id}`}>{vital.name}</label>
+        <div class={styles.inputWrapper}>
+          <input
+            id={`preset-input-${vital.id}`}
+            type="text"
+            class={styles.presetInput}
+            value={vital.value}
+            placeholder="text"
+            bind:this={inputRefs[vital.id]}
+            oninput={(e) =>
+              handlePresetValueChange(vital.id, (e.target as HTMLInputElement).value)
+            }
+            onblur={() => handlePresetBlur(vital.id)}
+          />
+        </div>
+      {:else}
+        <button
+          type="button"
+          class={styles.emptyStateLabel}
+          onclick={() => enterEditMode(vital.id)}
+        >
+          {vital.name}
+        </button>
+      {/if}
     </div>
   {/each}
 
