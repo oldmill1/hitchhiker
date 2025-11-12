@@ -16,9 +16,10 @@
     onFavoritesClick?: (() => void) | undefined;
     onTrashClick?: (() => void) | undefined;
     onAddCharacterClick?: (() => void) | undefined;
+    onViewClick?: (() => void) | undefined;
   }
 
-  let { column1, column2, column3, column4, column4Content, column1Header, characterName, onSelectAllClick, onFavoritesClick, onTrashClick, onAddCharacterClick }: Props = $props();
+  let { column1, column2, column3, column4, column4Content, column1Header, characterName, onSelectAllClick, onFavoritesClick, onTrashClick, onAddCharacterClick, onViewClick }: Props = $props();
 </script>
 
 <div class={styles.wrapper}>
@@ -27,6 +28,7 @@
     onFavoritesClick={onFavoritesClick}
     onTrashClick={onTrashClick}
     onAddCharacterClick={onAddCharacterClick}
+    onViewClick={onViewClick}
   />
   <Breadcrumb characterName={characterName} />
   <div class={styles.container}>

@@ -4,20 +4,22 @@
   import selectAllIcon from '$lib/assets/icons/select-all.png';
   import trashCanIcon from '$lib/assets/icons/trash-can.png';
   import newIcon from '$lib/assets/icons/new.png';
+  import viewIcon from '$lib/assets/icons/view.png';
 
   interface Props {
-    type: 'select-all' | 'favorites' | 'trash' | 'add-character';
+    type: 'select-all' | 'favorites' | 'trash' | 'add-character' | 'view';
     label?: string;
     onClick?: (() => void) | undefined;
   }
 
   let { type, label, onClick }: Props = $props();
 
-  const iconMap: Record<'select-all' | 'favorites' | 'trash' | 'add-character', string> = {
+  const iconMap: Record<'select-all' | 'favorites' | 'trash' | 'add-character' | 'view', string> = {
     'select-all': selectAllIcon,
     'favorites': heartIcon,
     'trash': trashCanIcon,
-    'add-character': newIcon
+    'add-character': newIcon,
+    'view': viewIcon
   };
 
   const iconSrc = iconMap[type];
