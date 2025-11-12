@@ -37,7 +37,7 @@
     toggleViewMode();
   }
 
-  let currentViewMode = $state<'column' | 'visualizer'>('column');
+  let currentViewMode = $state<'column' | 'visualizer'>('visualizer');
   
   $effect(() => {
     return viewMode.subscribe((mode) => {

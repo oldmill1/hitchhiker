@@ -6,7 +6,7 @@ export type ViewMode = 'column' | 'visualizer';
  * Global store for the current view mode.
  * Persists across navigation.
  */
-export const viewMode = writable<ViewMode>('column');
+export const viewMode = writable<ViewMode>('visualizer');
 
 /**
  * Set the view mode
