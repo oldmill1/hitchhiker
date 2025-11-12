@@ -1,0 +1,33 @@
+.breadcrumb {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  padding: .5rem 1rem;
+  background: #f0f4f8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.link {
+  text-decoration: none;
+  color: #64748b;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #334155;
+  }
+}
+
+.current {
+  color: #1e293b;
+}
+
+.separator {
+  color: #94a3b8;
+  margin: 0 0.25rem;
+}
+

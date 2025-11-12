@@ -15,3 +15,4 @@ export { default as ShortcutView } from './components/shared/ShortcutView/Shortc
 export { default as EditableVitalsForm } from './components/shared/EditableVitalsForm/EditableVitalsForm.svelte';
 export { default as EditableRelationshipsForm } from './components/shared/EditableRelationshipsForm/EditableRelationshipsForm.svelte';
 export { default as Notification } from './components/shared/Notification/Notification.svelte';
+export { default as Breadcrumb } from './components/shared/Breadcrumb/Breadcrumb.svelte';
