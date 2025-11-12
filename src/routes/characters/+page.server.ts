@@ -1,9 +1,9 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
-import { getCharactersList, getCharacters, createCharacter, getCharacterId, deleteCharacter } from '$lib/data/characters';
+import { getHomepageNavigationItems, getCharacters, createCharacter, getCharacterId, deleteCharacter } from '$lib/data/characters';
 
 export const load: PageServerLoad = async () => {
-  const charactersList = getCharactersList(true);
+  const charactersList = getHomepageNavigationItems(true);
   const characters = await getCharacters();
   
   console.log('[/characters] Fetched data:', {

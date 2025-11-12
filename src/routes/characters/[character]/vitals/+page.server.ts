@@ -1,7 +1,7 @@
 import { error, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { 
-  getCharactersList, 
+  getHomepageNavigationItems, 
   getCharacters, 
   getCharacter, 
   getCharacterActions,
@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ params }) => {
     throw error(404, 'Vitals not found');
   }
 
-  const charactersList = getCharactersList();
+  const charactersList = getHomepageNavigationItems();
   const characters = await getCharacters(params.character);
   const actions = getCharacterActions(params.character, 'vitals');
   

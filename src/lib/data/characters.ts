@@ -127,7 +127,7 @@ export function getCharacterActions(slug: string, currentAction?: 'vitals' | 're
   ];
 }
 
-export function getCharactersList(selected: boolean = false): ListItem[] {
+export function getHomepageNavigationItems(selected: boolean = false): ListItem[] {
   return [
     { content: 'Characters', link: '/characters', selected }
   ];

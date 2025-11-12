@@ -1,6 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
-import { getCharactersList, getCharacters, getCharacter, getCharacterActions, getCharacterId, deleteCharacter } from '$lib/data/characters';
+import { getHomepageNavigationItems, getCharacters, getCharacter, getCharacterActions, getCharacterId, deleteCharacter } from '$lib/data/characters';
 
 export const load: PageServerLoad = async ({ params }) => {
   const character = await getCharacter(params.character);
@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ params }) => {
     throw error(404, 'Character not found');
   }
 
-  const charactersList = getCharactersList();
+  const charactersList = getHomepageNavigationItems();
   const characters = await getCharacters(params.character);
   const actions = getCharacterActions(params.character);
   
