@@ -115,8 +115,8 @@
 </script>
 
 <ViewModeWrapper 
-  column1={data.homepageNavigationItems} 
-  column2={data.characters}
+  navigationItems={data.homepageNavigationItems} 
+  characters={data.characters}
   onSelectAllClick={handleSelectAll}
   onTrashClick={handleTrashClick}
   onAddCharacterClick={openModal}

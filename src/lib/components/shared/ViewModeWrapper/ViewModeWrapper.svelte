@@ -6,12 +6,12 @@
   import styles from './ViewModeWrapper.module.scss';
 
   interface Props {
-    column1?: ListItem[] | null;
-    column2?: ListItem[] | null;
-    column3?: ListItem[] | null;
-    column4?: PropItem[] | null;
-    column4Content?: Snippet;
-    column1Header?: Snippet;
+    navigationItems?: ListItem[] | null;
+    characters?: ListItem[] | null;
+    actions?: ListItem[] | null;
+    details?: PropItem[] | null;
+    detailsContent?: Snippet;
+    navigationItemsHeader?: Snippet;
     characterName?: string;
     onSelectAllClick?: (() => void) | undefined;
     onFavoritesClick?: (() => void) | undefined;
@@ -20,12 +20,12 @@
   }
 
   let { 
-    column1, 
-    column2, 
-    column3, 
-    column4, 
-    column4Content, 
-    column1Header, 
+    navigationItems, 
+    characters, 
+    actions, 
+    details, 
+    detailsContent, 
+    navigationItemsHeader, 
     characterName, 
     onSelectAllClick, 
     onFavoritesClick, 
@@ -37,7 +37,7 @@
     toggleViewMode();
   }
 
-  let currentViewMode = $state<'column' | 'visualizer'>('visualizer');
+  let currentViewMode = $state<'column' | 'visualizer'>('column');
   
   $effect(() => {
     return viewMode.subscribe((mode) => {
@@ -57,15 +57,15 @@
   <Breadcrumb characterName={characterName} />
   {#if currentViewMode === 'column'}
     <ColumnLayout 
-      column1={column1}
-      column2={column2}
-      column3={column3}
-      column4={column4}
-      column4Content={column4Content}
-      column1Header={column1Header}
+      navigationItems={navigationItems}
+      characters={characters}
+      actions={actions}
+      details={details}
+      detailsContent={detailsContent}
+      navigationItemsHeader={navigationItemsHeader}
     />
   {:else}
-    <Visualizer items={column2 ?? column1} />
+    <Visualizer items={characters ?? navigationItems} />
   {/if}
 </div>
 

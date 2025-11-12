@@ -55,14 +55,14 @@
 </script>
 
 <ViewModeWrapper 
-  column1={data.charactersList} 
-  column2={data.characters} 
-  column3={data.actions}
+  navigationItems={data.charactersList} 
+  characters={data.characters} 
+  actions={data.actions}
   characterName={data.character?.name}
   onSelectAllClick={handleSelectAll}
   onAddCharacterClick={openAddCharacterModal}
 >
-  {#snippet column4Content()}
+  {#snippet detailsContent()}
     <EditableRelationshipsForm 
       initialRelationships={data.relationshipsWithDetails} 
       availableCharacters={data.availableCharacters}

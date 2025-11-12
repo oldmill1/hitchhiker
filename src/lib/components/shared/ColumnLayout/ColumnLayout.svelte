@@ -5,38 +5,38 @@
   import type { Snippet } from 'svelte';
 
   interface Props {
-    column1?: ListItem[] | null;
-    column2?: ListItem[] | null;
-    column3?: ListItem[] | null;
-    column4?: PropItem[] | null;
-    column4Content?: Snippet;
-    column1Header?: Snippet;
+    navigationItems?: ListItem[] | null;
+    characters?: ListItem[] | null;
+    actions?: ListItem[] | null;
+    details?: PropItem[] | null;
+    detailsContent?: Snippet;
+    navigationItemsHeader?: Snippet;
   }
 
-  let { column1, column2, column3, column4, column4Content, column1Header }: Props = $props();
+  let { navigationItems, characters, actions, details, detailsContent, navigationItemsHeader }: Props = $props();
 </script>
 
 <div class={styles.container}>
   <div class={styles.column}>
-    {#if column1}
-      <List items={column1} header={column1Header} />
+    {#if navigationItems}
+      <List items={navigationItems} header={navigationItemsHeader} />
     {/if}
   </div>
   <div class={styles.column}>
-    {#if column2}
-      <List items={column2} />
+    {#if characters}
+      <List items={characters} />
     {/if}
   </div>
   <div class={styles.column}>
-    {#if column3}
-      <List items={column3} />
+    {#if actions}
+      <List items={actions} />
     {/if}
   </div>
   <div class={styles.doubleColumn}>
-    {#if column4Content}
-      {@render column4Content()}
-    {:else if column4}
-      <Infoscreen items={column4} />
+    {#if detailsContent}
+      {@render detailsContent()}
+    {:else if details}
+      <Infoscreen items={details} />
     {/if}
   </div>
 </div>
