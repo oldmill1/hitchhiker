@@ -3,16 +3,16 @@ import type { PageServerLoad, Actions } from './$types';
 import { getHomepageNavigationItems, getCharacters, createCharacter, getCharacterId, deleteCharacter } from '$lib/data/characters';
 
 export const load: PageServerLoad = async () => {
-  const charactersList = getHomepageNavigationItems(true);
+  const homepageNavigationItems = getHomepageNavigationItems(true);
   const characters = await getCharacters();
   
   console.log('[/characters] Fetched data:', {
-    charactersList,
+    homepageNavigationItems,
     characters
   });
   
   return {
-    charactersList,
+    homepageNavigationItems,
     characters
   };
 };

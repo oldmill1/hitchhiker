@@ -115,7 +115,7 @@
 </script>
 
 <ViewModeWrapper 
-  column1={data.charactersList} 
+  column1={data.homepageNavigationItems} 
   column2={data.characters}
   onSelectAllClick={handleSelectAll}
   onTrashClick={handleTrashClick}

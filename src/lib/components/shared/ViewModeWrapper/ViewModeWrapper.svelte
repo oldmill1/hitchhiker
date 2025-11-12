@@ -65,7 +65,7 @@
       column1Header={column1Header}
     />
   {:else}
-    <Visualizer homepageNavigationItems={column1} />
+    <Visualizer items={column2 ?? column1} />
   {/if}
 </div>
 

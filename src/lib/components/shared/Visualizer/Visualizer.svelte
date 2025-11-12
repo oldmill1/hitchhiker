@@ -4,16 +4,16 @@
   import { DesktopIcon } from '$lib';
 
   interface Props {
-    homepageNavigationItems?: ListItem[] | null;
+    items?: ListItem[] | null;
   }
 
-  let { homepageNavigationItems }: Props = $props();
+  let { items }: Props = $props();
 </script>
 
 <div class={styles.visualizer}>
-  {#if homepageNavigationItems}
+  {#if items}
     <div class={styles.grid}>
-      {#each homepageNavigationItems as item}
+      {#each items as item}
         <DesktopIcon label={item.content} />
       {/each}
     </div>
