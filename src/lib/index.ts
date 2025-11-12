@@ -18,3 +18,4 @@ export { default as Notification } from './components/shared/Notification/Notifi
 export { default as Breadcrumb } from './components/shared/Breadcrumb/Breadcrumb.svelte';
 export { default as Visualizer } from './components/shared/Visualizer/Visualizer.svelte';
 export { default as ViewModeWrapper } from './components/shared/ViewModeWrapper/ViewModeWrapper.svelte';
+export { default as DesktopIcon } from './components/shared/DesktopIcon/DesktopIcon.svelte';

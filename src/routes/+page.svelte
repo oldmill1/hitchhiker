@@ -16,7 +16,7 @@
 </script>
 
 <ViewModeWrapper 
-  column1={data.charactersList} 
+  column1={data.homepageNavigationItems} 
   onAddCharacterClick={openAddCharacterModal}
 />
 
