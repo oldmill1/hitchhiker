@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ColumnLayout, Modal, AddCharacterForm, EditableRelationshipsForm, Notification } from '$lib';
+  import { ViewModeWrapper, Modal, AddCharacterForm, EditableRelationshipsForm, Notification } from '$lib';
   import type { PageData } from './$types';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
@@ -54,7 +54,7 @@
   }
 </script>
 
-<ColumnLayout 
+<ViewModeWrapper 
   column1={data.charactersList} 
   column2={data.characters} 
   column3={data.actions}
@@ -70,7 +70,7 @@
       onSaveSuccess={handleSaveSuccess}
     />
   {/snippet}
-</ColumnLayout>
+</ViewModeWrapper>
 
 <Notification 
   message={notificationMessage} 

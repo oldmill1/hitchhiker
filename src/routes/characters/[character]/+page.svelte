@@ -1,7 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { isRedirect } from '@sveltejs/kit';
-  import { ColumnLayout, Modal, Button, Text, AddCharacterForm } from '$lib';
+  import { ViewModeWrapper, Modal, Button, Text, AddCharacterForm } from '$lib';
   import buttonStyles from '$lib/components/shared/Button/Button.module.scss';
   import type { PageData } from './$types';
   import { goto } from '$app/navigation';
@@ -95,7 +95,7 @@
   }
 </script>
 
-<ColumnLayout 
+<ViewModeWrapper 
   column1={data.charactersList} 
   column2={data.characters} 
   column3={data.actions}

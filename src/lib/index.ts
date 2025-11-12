@@ -16,3 +16,5 @@ export { default as EditableVitalsForm } from './components/shared/EditableVital
 export { default as EditableRelationshipsForm } from './components/shared/EditableRelationshipsForm/EditableRelationshipsForm.svelte';
 export { default as Notification } from './components/shared/Notification/Notification.svelte';
 export { default as Breadcrumb } from './components/shared/Breadcrumb/Breadcrumb.svelte';
+export { default as Visualizer } from './components/shared/Visualizer/Visualizer.svelte';
+export { default as ViewModeWrapper } from './components/shared/ViewModeWrapper/ViewModeWrapper.svelte';

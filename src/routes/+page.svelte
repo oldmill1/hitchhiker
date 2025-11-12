@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ColumnLayout, Modal, AddCharacterForm } from '$lib';
+  import { ViewModeWrapper, Modal, AddCharacterForm } from '$lib';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
@@ -15,7 +15,7 @@
   }
 </script>
 
-<ColumnLayout 
+<ViewModeWrapper 
   column1={data.charactersList} 
   onAddCharacterClick={openAddCharacterModal}
 />
