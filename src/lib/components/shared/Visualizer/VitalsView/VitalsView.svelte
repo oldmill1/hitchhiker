@@ -1,7 +1,7 @@
 <script lang="ts">
   import styles from './VitalsView.module.scss';
   import type { PropItem } from '$lib/data/characters';
-  import { VitalCard } from '$lib';
+  import { Text } from '$lib';
 
   interface Props {
     vitals?: PropItem[] | null;
@@ -11,9 +11,16 @@
 </script>
 
 {#if vitals}
-  <div class={styles.vitalsGrid}>
+  <div class={styles.vitalsList}>
     {#each vitals as vital}
-      <VitalCard name={vital.name} value={vital.value} />
+      <div class={styles.vitalItem}>
+        <Text el="span" weight="lg" color="#ffffff">
+          {vital.name}:
+        </Text>
+        <Text el="span" color="#a0a0a0">
+          {vital.value}
+        </Text>
+      </div>
     {/each}
   </div>
 {/if}
