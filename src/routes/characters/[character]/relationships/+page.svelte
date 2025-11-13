@@ -59,6 +59,7 @@
   characters={data.characters} 
   actions={data.actions}
   characterName={data.character?.name}
+  relationshipsWithDetails={data.relationshipsWithDetails}
   onSelectAllClick={handleSelectAll}
   onAddCharacterClick={openAddCharacterModal}
 >

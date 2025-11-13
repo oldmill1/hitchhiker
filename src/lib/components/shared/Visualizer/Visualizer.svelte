@@ -1,6 +1,6 @@
 <script lang="ts">
   import styles from './Visualizer.module.scss';
-  import type { ListItem, PropItem } from '$lib/data/characters';
+  import type { ListItem, PropItem, RelationshipItem } from '$lib/data/characters';
   import { DesktopIcon, VitalCard } from '$lib';
   import { page } from '$app/stores';
 
@@ -9,14 +9,22 @@
     characters?: ListItem[] | null;
     actions?: ListItem[] | null;
     vitals?: PropItem[] | null;
+    relationshipsWithDetails?: RelationshipItem[] | null;
+    characterName?: string;
   }
 
-  let { navigationItems, characters, actions, vitals }: Props = $props();
+  let { navigationItems, characters, actions, vitals, relationshipsWithDetails, characterName }: Props = $props();
 
   // Check if we're displaying vitals (for card layout vs icon grid)
   const isVitalsView = $derived.by(() => {
     const pathname = $page.url.pathname;
     return pathname.endsWith('/vitals') && pathname.startsWith('/characters/');
+  });
+
+  // Check if we're displaying relationships (for text list view)
+  const isRelationshipsView = $derived.by(() => {
+    const pathname = $page.url.pathname;
+    return pathname.endsWith('/relationships') && pathname.startsWith('/characters/');
   });
 
   // Determine which items to display based on the current URL pathname
@@ -26,6 +34,11 @@
     // If on vitals page (/characters/[slug]/vitals), show vitals
     if (isVitalsView) {
       return vitals ?? null;
+    }
+    
+    // If on relationships page (/characters/[slug]/relationships), skip (handled separately)
+    if (isRelationshipsView) {
+      return null;
     }
     
     // If on character detail page (/characters/[slug]), show actions
@@ -51,7 +64,14 @@
   const vitalsToDisplay = $derived(isVitalsView ? (vitals ?? null) : null);
   
   // List items for icon grid (navigationItems, characters, actions)
-  const listItemsToDisplay = $derived(isVitalsView ? null : (itemsToDisplay as ListItem[] | null));
+  const listItemsToDisplay = $derived(
+    isVitalsView || isRelationshipsView ? null : (itemsToDisplay as ListItem[] | null)
+  );
+
+  // Relationships to display
+  const relationshipsToDisplay = $derived(
+    isRelationshipsView ? (relationshipsWithDetails ?? null) : null
+  );
 </script>
 
 <div class={styles.visualizer}>
@@ -60,6 +80,16 @@
     <div class={styles.vitalsGrid}>
       {#each vitalsToDisplay as vital}
         <VitalCard name={vital.name} value={vital.value} />
+      {/each}
+    </div>
+  {:else if isRelationshipsView && relationshipsToDisplay}
+    <!-- Text list view for relationships -->
+    <div class={styles.relationshipsList}>
+      {#each relationshipsToDisplay as relationship}
+        <div class={styles.relationshipItem}>
+          <span class={styles.relationshipLabel}>{relationship.label}:</span>
+          <span class={styles.relationshipName}>{relationship.toCharacterName}</span>
+        </div>
       {/each}
     </div>
   {:else if listItemsToDisplay}

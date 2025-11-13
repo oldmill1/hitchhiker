@@ -51,6 +51,6 @@
   },
   "dependencies": {
     "@iconify/svelte": "^5.1.0",
-    "@prisma/client": "^6.19.0"
+    "@prisma/client": "^6.19.0",
   }
 }

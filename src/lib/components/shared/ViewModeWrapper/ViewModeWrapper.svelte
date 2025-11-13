@@ -1,7 +1,7 @@
 <script lang="ts">
   import { ShortcutView, Breadcrumb, ColumnLayout, Visualizer } from '$lib';
   import { viewMode, toggleViewMode, setViewMode } from '$lib/stores/viewMode';
-  import type { ListItem, PropItem } from '$lib/data/characters';
+  import type { ListItem, PropItem, RelationshipItem } from '$lib/data/characters';
   import type { Snippet } from 'svelte';
   import styles from './ViewModeWrapper.module.scss';
 
@@ -11,6 +11,7 @@
     actions?: ListItem[] | null;
     details?: PropItem[] | null;
     vitals?: PropItem[] | null;
+    relationshipsWithDetails?: RelationshipItem[] | null;
     detailsContent?: Snippet;
     navigationItemsHeader?: Snippet;
     characterName?: string;
@@ -26,6 +27,7 @@
     actions, 
     details, 
     vitals,
+    relationshipsWithDetails,
     detailsContent, 
     navigationItemsHeader, 
     characterName, 
@@ -77,6 +79,8 @@
       characters={characters}
       actions={actions}
       vitals={vitals}
+      relationshipsWithDetails={relationshipsWithDetails}
+      characterName={characterName}
     />
   {/if}
 </div>
