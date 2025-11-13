@@ -10,6 +10,7 @@
     characters?: ListItem[] | null;
     actions?: ListItem[] | null;
     details?: PropItem[] | null;
+    vitals?: PropItem[] | null;
     detailsContent?: Snippet;
     navigationItemsHeader?: Snippet;
     characterName?: string;
@@ -24,6 +25,7 @@
     characters, 
     actions, 
     details, 
+    vitals,
     detailsContent, 
     navigationItemsHeader, 
     characterName, 
@@ -74,6 +76,7 @@
       navigationItems={navigationItems}
       characters={characters}
       actions={actions}
+      vitals={vitals}
     />
   {/if}
 </div>

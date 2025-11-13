@@ -16,3 +16,12 @@
   width: 100%;
 }
 
+.vitalsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 180px));
+  gap: 2rem;
+  align-content: start;
+  justify-content: center;
+  width: 100%;
+}
+

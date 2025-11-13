@@ -22,7 +22,6 @@
     <Shortcut type="trash" label="Trash" onClick={onTrashClick} />
   </div>
   <div class={styles.rightShortcuts}>
-    <Shortcut type="table" label="Table" onClick={onTableClick} />
     <Shortcut type="view" label="Visualizer" onClick={onViewClick} />
   </div>
 </div>

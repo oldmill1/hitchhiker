@@ -58,6 +58,7 @@
   navigationItems={data.charactersList} 
   characters={data.characters} 
   actions={data.actions}
+  vitals={data.vitals}
   characterName={data.character?.name}
   onSelectAllClick={handleSelectAll}
   onAddCharacterClick={openAddCharacterModal}
