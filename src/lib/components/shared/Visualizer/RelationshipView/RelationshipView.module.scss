@@ -1,0 +1,22 @@
+.relationshipsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.relationshipItem {
+  display: flex;
+  gap: 0.5rem;
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.relationshipLabel {
+  font-weight: 600;
+}
+
+.relationshipName {
+  color: #a0a0a0;
+}
+

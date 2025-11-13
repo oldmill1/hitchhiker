@@ -1,8 +1,10 @@
 <script lang="ts">
   import styles from './Visualizer.module.scss';
   import type { ListItem, PropItem, RelationshipItem } from '$lib/data/characters';
-  import { DesktopIcon, VitalCard } from '$lib';
+  import { DesktopIcon } from '$lib';
   import { page } from '$app/stores';
+  import RelationshipView from './RelationshipView/RelationshipView.svelte';
+  import VitalsView from './VitalsView/VitalsView.svelte';
 
   interface Props {
     navigationItems?: ListItem[] | null;
@@ -60,38 +62,19 @@
     return null;
   });
 
-  // Separate vitals for type safety
-  const vitalsToDisplay = $derived(isVitalsView ? (vitals ?? null) : null);
-  
   // List items for icon grid (navigationItems, characters, actions)
   const listItemsToDisplay = $derived(
     isVitalsView || isRelationshipsView ? null : (itemsToDisplay as ListItem[] | null)
   );
-
-  // Relationships to display
-  const relationshipsToDisplay = $derived(
-    isRelationshipsView ? (relationshipsWithDetails ?? null) : null
-  );
 </script>
 
 <div class={styles.visualizer}>
-  {#if isVitalsView && vitalsToDisplay}
+  {#if isVitalsView}
     <!-- Card-based layout for vitals -->
-    <div class={styles.vitalsGrid}>
-      {#each vitalsToDisplay as vital}
-        <VitalCard name={vital.name} value={vital.value} />
-      {/each}
-    </div>
-  {:else if isRelationshipsView && relationshipsToDisplay}
+    <VitalsView vitals={vitals} />
+  {:else if isRelationshipsView}
     <!-- Text list view for relationships -->
-    <div class={styles.relationshipsList}>
-      {#each relationshipsToDisplay as relationship}
-        <div class={styles.relationshipItem}>
-          <span class={styles.relationshipLabel}>{relationship.label}:</span>
-          <span class={styles.relationshipName}>{relationship.toCharacterName}</span>
-        </div>
-      {/each}
-    </div>
+    <RelationshipView relationshipsWithDetails={relationshipsWithDetails} />
   {:else if listItemsToDisplay}
     <!-- Icon grid for navigation items, characters, and actions -->
     <div class={styles.grid}>
