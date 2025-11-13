@@ -2,7 +2,7 @@
   import styles from './Visualizer.module.scss';
   import type { ListItem, PropItem, RelationshipItem } from '$lib/data/characters';
   import { DesktopIcon } from '$lib';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import RelationshipView from './RelationshipView/RelationshipView.svelte';
   import VitalsView from './VitalsView/VitalsView.svelte';
 
@@ -19,19 +19,19 @@
 
   // Check if we're displaying vitals (for card layout vs icon grid)
   const isVitalsView = $derived.by(() => {
-    const pathname = $page.url.pathname;
+    const pathname = page.url.pathname;
     return pathname.endsWith('/vitals') && pathname.startsWith('/characters/');
   });
 
   // Check if we're displaying relationships (for text list view)
   const isRelationshipsView = $derived.by(() => {
-    const pathname = $page.url.pathname;
+    const pathname = page.url.pathname;
     return pathname.endsWith('/relationships') && pathname.startsWith('/characters/');
   });
 
   // Determine which items to display based on the current URL pathname
   const itemsToDisplay = $derived.by(() => {
-    const pathname = $page.url.pathname;
+    const pathname = page.url.pathname;
     
     // If on vitals page (/characters/[slug]/vitals), show vitals
     if (isVitalsView) {
