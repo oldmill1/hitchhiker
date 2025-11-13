@@ -8,9 +8,10 @@
     onTrashClick?: (() => void) | undefined;
     onAddCharacterClick?: (() => void) | undefined;
     onViewClick?: (() => void) | undefined;
+    onTableClick?: (() => void) | undefined;
   }
 
-  let { onSelectAllClick, onFavoritesClick, onTrashClick, onAddCharacterClick, onViewClick }: Props = $props();
+  let { onSelectAllClick, onFavoritesClick, onTrashClick, onAddCharacterClick, onViewClick, onTableClick }: Props = $props();
 </script>
 
 <div class={styles.shortcutView}>
@@ -20,6 +21,9 @@
     <Shortcut type="add-character" label="New" onClick={onAddCharacterClick} />
     <Shortcut type="trash" label="Trash" onClick={onTrashClick} />
   </div>
-  <Shortcut type="view" label="Visualizer" onClick={onViewClick} />
+  <div class={styles.rightShortcuts}>
+    <Shortcut type="table" label="Table" onClick={onTableClick} />
+    <Shortcut type="view" label="Visualizer" onClick={onViewClick} />
+  </div>
 </div>
 

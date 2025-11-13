@@ -34,16 +34,23 @@
   }
 
   function buildBreadcrumbs(pathname: string): BreadcrumbItem[] {
-    // Don't show breadcrumbs on root path or single-level paths (e.g., /characters)
-    // Only show breadcrumbs starting from 2+ levels deep (e.g., /characters/captain-ahab)
+    // Don't show breadcrumbs on root path
+    // Show breadcrumbs starting from 1+ segments (e.g., /characters, /characters/captain-ahab)
     const segments = pathname.split('/').filter(Boolean);
     
-    // Only show breadcrumbs if there are 2 or more segments
-    if (segments.length < 2) {
+    // Only show breadcrumbs if there is at least 1 segment
+    if (segments.length < 1) {
       return [];
     }
 
     const breadcrumbs: BreadcrumbItem[] = [];
+
+    // Add root breadcrumb "Home" that links to home
+    breadcrumbs.push({
+      label: 'Home',
+      href: '/',
+      isCurrent: false
+    });
 
     segments.forEach((segment, index) => {
       const href = '/' + segments.slice(0, index + 1).join('/');

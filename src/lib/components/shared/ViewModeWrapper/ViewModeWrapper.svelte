@@ -1,6 +1,6 @@
 <script lang="ts">
   import { ShortcutView, Breadcrumb, ColumnLayout, Visualizer } from '$lib';
-  import { viewMode, toggleViewMode } from '$lib/stores/viewMode';
+  import { viewMode, toggleViewMode, setViewMode } from '$lib/stores/viewMode';
   import type { ListItem, PropItem } from '$lib/data/characters';
   import type { Snippet } from 'svelte';
   import styles from './ViewModeWrapper.module.scss';
@@ -37,6 +37,10 @@
     toggleViewMode();
   }
 
+  function handleTableClick() {
+    setViewMode('column');
+  }
+
   let currentViewMode = $state<'column' | 'visualizer'>('visualizer');
   
   $effect(() => {
@@ -53,6 +57,7 @@
     onTrashClick={onTrashClick}
     onAddCharacterClick={onAddCharacterClick}
     onViewClick={handleViewClick}
+    onTableClick={handleTableClick}
   />
   <Breadcrumb characterName={characterName} />
   {#if currentViewMode === 'column'}
@@ -65,7 +70,11 @@
       navigationItemsHeader={navigationItemsHeader}
     />
   {:else}
-    <Visualizer items={characters ?? navigationItems} />
+    <Visualizer 
+      navigationItems={navigationItems}
+      characters={characters}
+      actions={actions}
+    />
   {/if}
 </div>
 
